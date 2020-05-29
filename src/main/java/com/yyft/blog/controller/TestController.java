@@ -12,6 +12,6 @@ public class TestController {
     @RequestMapping("/{name}")
     @ResponseBody
     public String getUser(@PathVariable String name) {
-        return "hello,111" + name;
+        return "hello,aa11" + name;
     }
 }
