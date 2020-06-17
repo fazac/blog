@@ -38,9 +38,9 @@ public class JWTTest {
 //        System.out.println(secretString);
         KeyPair keyPair = Keys.keyPairFor(SignatureAlgorithm.RS256);
         PrivateKey privateKey = keyPair.getPrivate();
-//        System.out.println(Encoders.BASE64.encode(privateKey.getEncoded()));
+        System.out.println(Encoders.BASE64.encode(privateKey.getEncoded()));
         PublicKey publicKey = keyPair.getPublic();
-//        System.out.println(Encoders.BASE64.encode(publicKey.getEncoded()));
+        System.out.println(Encoders.BASE64.encode(publicKey.getEncoded()));
 
         String jws = Jwts.builder()
                 .setHeaderParam("k_id", "bbb123")

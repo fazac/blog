@@ -16,4 +16,6 @@ public interface YfUsrMapper {
     int updateByPrimaryKeySelective(YfUsr record);
 
     int updateByPrimaryKey(YfUsr record);
+
+    YfUsr findByMobilePass(String mobile, String pass);
 }

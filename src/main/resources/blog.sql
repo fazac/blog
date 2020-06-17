@@ -1,3 +1,4 @@
+drop table if exists `yf_usr`;
 create table yf_usr
 (
     `sn`       int(11) auto_increment comment 'sn',
@@ -26,3 +27,8 @@ create table yf_token
     `third_session` varchar(64) COMMENT '三方平台的登陆session, 微信小程序中为session_key',
     PRIMARY key (`sn`)
 );
+
+alter table yf_token
+    add column `public_key` varchar(512) comment '公钥';
+alter table yf_token
+    MODIFY COLUMN `token` varchar(1024) DEFAULT NULL COMMENT 'token';

@@ -5,6 +5,7 @@ import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 @Component
@@ -95,7 +96,7 @@ public class RedisUtil {
      * @param value value
      */
     public void addCache(String name, String key, String value) {
-        cacheManager.getCache(name).putIfAbsent(key, value); // 已有不添加
+        Objects.requireNonNull(cacheManager.getCache(name)).putIfAbsent(key, value); // 已有不添加
     }
 
     /**
@@ -106,7 +107,7 @@ public class RedisUtil {
      * @return value
      */
     public String getCache(String name, String key) {
-        return cacheManager.getCache(name).get(key, String.class);
+        return Objects.requireNonNull(cacheManager.getCache(name)).get(key, String.class);
     }
 
     /**
@@ -115,7 +116,7 @@ public class RedisUtil {
      * @param name name
      */
     public void clearCache(String name) {
-        cacheManager.getCache(name).clear();
+        Objects.requireNonNull(cacheManager.getCache(name)).clear();
     }
 
     /**
@@ -125,6 +126,6 @@ public class RedisUtil {
      * @param key  key
      */
     public void delCache(String name, String key) {
-        cacheManager.getCache(name).evictIfPresent(key);
+        Objects.requireNonNull(cacheManager.getCache(name)).evictIfPresent(key);
     }
 }

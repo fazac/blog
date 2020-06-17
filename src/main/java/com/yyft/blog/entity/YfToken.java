@@ -67,6 +67,10 @@ public class YfToken implements Serializable {
      * 三方平台的登陆session, 微信小程序中为session_key
      */
     private String thirdSession;
+    /**
+     * 公钥
+     */
+    private String publicKey;
 
     private static final long serialVersionUID = 1L;
 }

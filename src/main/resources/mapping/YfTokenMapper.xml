@@ -11,18 +11,29 @@
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
         <result column="ip" jdbcType="VARCHAR" property="ip"/>
         <result column="token_salt" jdbcType="VARCHAR" property="tokenSalt"/>
+        <result column="public_key" jdbcType="VARCHAR" property="publicKey"/>
         <result column="unionid" jdbcType="VARCHAR" property="unionid"/>
         <result column="third_session" jdbcType="VARCHAR" property="thirdSession"/>
     </resultMap>
     <sql id="Base_Column_List">
         sn, user_sn, token, `uid`, device, expire_date, update_time, ip, token_salt, unionid,
-    third_session
+        third_session , public_key
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from yf_token
         where sn = #{sn,jdbcType=INTEGER}
+    </select>
+    <select id="getByUserId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from yf_token
+        where user_sn = #{sn,jdbcType=INTEGER}
+        and expire_date &gt; #{date ,jdbcType=TIMESTAMP}
+    </select>
+    <select id="findPublicKeyByToken" resultType="java.lang.String">
+        select public_key from yf_token where token = #{token,jdbcType=VARCHAR}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete
@@ -32,13 +43,13 @@
     <insert id="insert" keyColumn="sn" keyProperty="sn" parameterType="com.yyft.blog.entity.YfToken"
             useGeneratedKeys="true">
         insert into yf_token (user_sn, token, `uid`,
-                              device, expire_date, update_time,
-                              ip, token_salt, unionid,
-                              third_session)
+        device, expire_date, update_time,
+        ip, token_salt, unionid,
+        third_session ,public_key)
         values (#{userSn,jdbcType=INTEGER}, #{token,jdbcType=VARCHAR}, #{uid,jdbcType=VARCHAR},
-                #{device,jdbcType=VARCHAR}, #{expireDate,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},
-                #{ip,jdbcType=VARCHAR}, #{tokenSalt,jdbcType=VARCHAR}, #{unionid,jdbcType=VARCHAR},
-                #{thirdSession,jdbcType=VARCHAR})
+        #{device,jdbcType=VARCHAR}, #{expireDate,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},
+        #{ip,jdbcType=VARCHAR}, #{tokenSalt,jdbcType=VARCHAR}, #{unionid,jdbcType=VARCHAR},
+        #{thirdSession,jdbcType=VARCHAR} ,#{publicKey,jdbcType=VARCHAR})
     </insert>
     <insert id="insertSelective" keyColumn="sn" keyProperty="sn" parameterType="com.yyft.blog.entity.YfToken"
             useGeneratedKeys="true">
@@ -74,6 +85,9 @@
             <if test="thirdSession != null">
                 third_session,
             </if>
+            <if test="publicKey != null">
+                public_key,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="userSn != null">
@@ -105,6 +119,9 @@
             </if>
             <if test="thirdSession != null">
                 #{thirdSession,jdbcType=VARCHAR},
+            </if>
+            <if test="publicKey != null">
+                #{publicKey,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -141,21 +158,25 @@
             <if test="thirdSession != null">
                 third_session = #{thirdSession,jdbcType=VARCHAR},
             </if>
+            <if test="publicKey != null">
+                public_key = #{publicKey,jdbcType=VARCHAR},
+            </if>
         </set>
         where sn = #{sn,jdbcType=INTEGER}
     </update>
     <update id="updateByPrimaryKey" parameterType="com.yyft.blog.entity.YfToken">
         update yf_token
-        set user_sn       = #{userSn,jdbcType=INTEGER},
-            token         = #{token,jdbcType=VARCHAR},
-            `uid`         = #{uid,jdbcType=VARCHAR},
-            device        = #{device,jdbcType=VARCHAR},
-            expire_date   = #{expireDate,jdbcType=TIMESTAMP},
-            update_time   = #{updateTime,jdbcType=TIMESTAMP},
-            ip            = #{ip,jdbcType=VARCHAR},
-            token_salt    = #{tokenSalt,jdbcType=VARCHAR},
-            unionid       = #{unionid,jdbcType=VARCHAR},
-            third_session = #{thirdSession,jdbcType=VARCHAR}
+        set user_sn = #{userSn,jdbcType=INTEGER},
+        token = #{token,jdbcType=VARCHAR},
+        `uid` = #{uid,jdbcType=VARCHAR},
+        device = #{device,jdbcType=VARCHAR},
+        expire_date = #{expireDate,jdbcType=TIMESTAMP},
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+        ip = #{ip,jdbcType=VARCHAR},
+        token_salt = #{tokenSalt,jdbcType=VARCHAR},
+        unionid = #{unionid,jdbcType=VARCHAR},
+        third_session = #{thirdSession,jdbcType=VARCHAR},
+        public_key = #{publicKey,jdbcType=VARCHAR}
         where sn = #{sn,jdbcType=INTEGER}
     </update>
 </mapper>
