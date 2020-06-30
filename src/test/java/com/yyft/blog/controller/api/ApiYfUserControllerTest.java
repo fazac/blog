@@ -1,5 +1,7 @@
-package com.yyft.blog.controller;
+package com.yyft.blog.controller.api;
 
+import com.yyft.blog.controller.BaseMock;
+import com.yyft.blog.controller.api.ApiYfUserController;
 import com.yyft.blog.entity.YfUsr;
 import com.yyft.common.utils.mapper.JsonMapper;
 import com.yyft.common.utils.security.MD5Util;
@@ -27,19 +29,19 @@ import java.nio.charset.StandardCharsets;
  * @Version 1.0
  */
 @Slf4j
-public class YfUserControllerTest extends BaseMock {
+public class ApiYfUserControllerTest extends BaseMock {
 
 
     private MockMvc mvc;
 
     @Autowired
-    private YfUserController yfUserController;
+    private ApiYfUserController apiYfUserController;
 
 
     @Before
     @Override
     public void setUp() {
-        mvc = MockMvcBuilders.standaloneSetup(yfUserController).build();
+        mvc = MockMvcBuilders.standaloneSetup(apiYfUserController).build();
     }
 
 

@@ -66,7 +66,6 @@ public class TokenUtil {
                 .setAudience(yfUsr.getPhone())          // 接收对象
                 .signWith(privateKey, SignatureAlgorithm.RS256)
                 .compact();
-        System.out.println("token: " + token);
         yfToken.setToken(token);
         yfToken.setUserSn(yfUsr.getSn());
         yfToken.setPublicKey(publicKeyString);
