@@ -1,5 +1,6 @@
 package com.yyft.blog.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.yyft.blog.entity.Blog;
 import com.yyft.blog.entity.query.BlogQuery;
 import org.apache.ibatis.annotations.Insert;
@@ -7,12 +8,10 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
-import java.util.Date;
 import java.util.List;
 
-@Mapper
 @Repository
-public interface BlogMapper {
+public interface BlogMapper extends BaseMapper<Blog> {
 
     @Insert("insert into blog (title, show_cover_pic, digest, \n" +
             "      content, author, create_time, \n" +

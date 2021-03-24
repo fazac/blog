@@ -1,6 +1,8 @@
 package com.yyft.blog.mapper;
 
 import com.yyft.blog.entity.YfUsr;
+import org.apache.ibatis.annotations.Mapper;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.stereotype.Repository;
 
 @Repository

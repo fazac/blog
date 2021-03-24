@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 @Slf4j
 @Component
 public class JWTIntercept extends HandlerInterceptorAdapter {
-    @Autowired
+
     private TokenUtil tokenUtil;
 
     @Override
@@ -44,5 +44,10 @@ public class JWTIntercept extends HandlerInterceptorAdapter {
         tokenUtil.checkToken(token);
 
         return true;
+    }
+
+    @Autowired
+    public void setTokenUtil(TokenUtil tokenUtil) {
+        this.tokenUtil = tokenUtil;
     }
 }

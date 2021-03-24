@@ -8,7 +8,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class TokenConfig implements WebMvcConfigurer {
-    @Autowired
+
     private JWTIntercept jwtIntercept;
 
     @Override
@@ -16,5 +16,10 @@ public class TokenConfig implements WebMvcConfigurer {
         registry.addInterceptor(jwtIntercept)
                 .addPathPatterns("/api/**")
                 .excludePathPatterns("/druid/**,/blog/**");
+    }
+
+    @Autowired
+    public void setJwtIntercept(JWTIntercept jwtIntercept) {
+        this.jwtIntercept = jwtIntercept;
     }
 }

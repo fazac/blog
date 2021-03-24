@@ -31,9 +31,9 @@ import java.util.Date;
 @Component
 @Slf4j
 public class TokenUtil {
-    @Autowired
+
     private RedisUtil redisUtil;
-    @Autowired
+    
     private YfTokenService yfTokenService;
 
     public static final String AUTH_HEADER_KEY = "Authorization";
@@ -102,4 +102,13 @@ public class TokenUtil {
         }
     }
 
+    @Autowired
+    public void setRedisUtil(RedisUtil redisUtil) {
+        this.redisUtil = redisUtil;
+    }
+
+    @Autowired
+    public void setYfTokenService(YfTokenService yfTokenService) {
+        this.yfTokenService = yfTokenService;
+    }
 }

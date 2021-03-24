@@ -1,11 +1,15 @@
 package com.yyft.blog.entity;
 
-import java.io.Serializable;
-import java.util.Date;
-
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * blog
@@ -19,6 +23,7 @@ public class Blog implements Serializable {
     /**
      * blogID
      */
+    @TableId(type = IdType.AUTO)
     private Integer blogId;
 
     /**
@@ -41,14 +46,11 @@ public class Blog implements Serializable {
      */
     private String content;
 
-    /**
-     * blog创建人
-     */
-    private String author;
 
     /**
      * 创建时间
      */
+    @TableField(fill = FieldFill.INSERT)
     private Date createTime;
 
     /**
@@ -59,12 +61,8 @@ public class Blog implements Serializable {
     /**
      * 更新时间
      */
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
-
-    /**
-     * 所属模块类型
-     */
-    private Integer moduleType;
 
     /**
      * blog状态  CREATE-已创建,  PUBLISH-已发表, INACTIVE-已作废
@@ -79,7 +77,17 @@ public class Blog implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 模块类型名称
+     * 分类id
      */
-    private String moduleTypeName;
+    private String labelids;
+
+    /**
+     * 浏览数
+     */
+    private String viewCount;
+
+    /**
+     * 版本号
+     */
+    private Integer version;
 }

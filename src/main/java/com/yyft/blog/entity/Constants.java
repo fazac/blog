@@ -13,6 +13,5 @@ public class Constants {
     public static final int CACHE_EXPIRE_DAY = 3;
     public static final String TOKEN_KEY_NAME = "token";
     public static final String JWT_ISSUER = "yyft.tk";
-
-
+    public static final String LINE_SEPERATOR = "|";
 }

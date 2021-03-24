@@ -1,14 +1,14 @@
 package com.yyft.blog.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.yyft.blog.entity.Label;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
-@Mapper
 @Repository
-public interface LabelMapper {
+public interface LabelMapper extends BaseMapper<Label> {
     @Insert("insert into label (`name`)  values (#{name,jdbcType=VARCHAR})")
-    int insert(Label record);
+    int saveLabel(Label record);
 
 }

@@ -10,8 +10,7 @@
     <link rel="shortcut icon" th:href="@{/static/public/favicon.ico}"/>
     <link rel="bookmark" th:href="@{/static/public/favicon.ico}"/>
     <link th:href="@{/static/bootstrap/bootstrap.css}" rel="stylesheet">
-    <script th:src="@{/static/ui/js/main.js}"></script>
-    <script th:src="@{/static/jQuery/jquery-3.5.1.js}"></script>
+
     <style>
         .bd-placeholder-img {
             font-size: 1.125rem;
@@ -90,6 +89,8 @@
     <p class="mt-5 mb-3 text-muted">&copy; 2017-2020</p>
 </div>
 </body>
+<script th:src="@{/static/jQuery/jquery-3.5.1.js}"></script>
+<script th:src="@{/static/ui/js/main.js}"></script>
 <script type="text/javascript">
     "use strict";
 
@@ -97,29 +98,30 @@
 
     }
 
-    function doLogin() {
-        $.ajax({
-            type: "POST",
-            url: "/blog/doLogin",
-            data: {
-                "mobile": $("input[type = 'text']".val()),
-                "pass": $("#inputPassword".val())
-            },
-            dataType: "json",
-            success: function (data) {
-                console.log(data);
-                alert("success");
-                window.location.href(data.url);
-            }
-        });
-    }
+    // function doLogin() {
+    //     $.ajax({
+    //         type: "POST",
+    //         url: "/blog/user/doLogin",
+    //         data: {
+    //             "mobile": $("input[type = 'text']".val()),
+    //             "pass": $("#inputPassword".val())
+    //         },
+    //         dataType: "json",
+    //         success: function (data) {
+    //             console.log(data);
+    //             alert("success");
+    //             window.location.href(data.url);
+    //         }
+    //     });
+    // }
 
     function bind() {
         $(document).on('click', '.btn', function () {
-            $.post("/blog/doLogin", {
+            $.post("/blog/user/doLogin", {
                 "mobile": $("input[type = 'text']").val(),
                 "pass": $("#inputPassword").val()
             }, function (data) {
+                console.log(data);
                 if (data.detail.bizCode < 0) {
                     alert(data.detail.bizMessage);
                     window.location.reload();
@@ -136,4 +138,6 @@
         bind();
     });
 </script>
+
+
 </html>

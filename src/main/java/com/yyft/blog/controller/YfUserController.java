@@ -27,20 +27,22 @@ import java.util.Objects;
  */
 @Slf4j
 @Controller
-@RequestMapping(value = "/blog")
+@RequestMapping(value = "/blog/user")
 public class YfUserController {
     @Autowired
     private YfUserService yfUserService;
 
-    @RequestMapping("login")
-    public String login() {
-        return "login";
-    }
 
-    @RequestMapping("home")
-    public String home(Model model) {
-        return "home";
-    }
+
+//    @RequestMapping("doLogin")
+//    @ResponseBody
+//    public String login(Model model, @RequestParam("mobile") String mobile,
+//                        @RequestParam("pass") String pass) {
+//        log.info("mobile" + mobile + ",pass" + pass);
+//        Pair<String, String> res = yfUserService.login(mobile, pass);
+//        model.addAttribute("res", res);
+//        return "home";
+//    }
 
     @RequestMapping("doLogin")
     @ResponseBody

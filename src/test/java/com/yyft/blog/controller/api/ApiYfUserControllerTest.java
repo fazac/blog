@@ -45,7 +45,7 @@ public class ApiYfUserControllerTest extends BaseMock {
     }
 
 
-    @Test
+//    @Test
     @Rollback(false)
     public void register() throws Exception {
         String uri = "/usr/register";

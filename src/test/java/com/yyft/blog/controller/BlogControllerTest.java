@@ -45,11 +45,9 @@ public class BlogControllerTest extends BaseMock {
     public void saveBlog() throws Exception {
         String uri = "/blogs";
         Blog blog = new Blog();
-        blog.setAuthor("aa");
         blog.setContent("hhhhhhhhhhh");
         blog.setCreateTime(ClockUtil.currentDate());
         blog.setDigest("hhh");
-        blog.setModuleType(1);
         blog.setTitle("A");
         blog.setStatus("1");
         blog.setSortId(1);
