@@ -76,3 +76,5 @@ create table `comment`
 
 alter table blog add column `version` int(4) comment '版本(乐观锁)';
 alter table label add column `type` varchar(2) comment '类型（0 分类 ，1日期）';
+
+
