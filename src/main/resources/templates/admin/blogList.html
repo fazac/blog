@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/common::admin-header-link"></head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div th:replace="admin/common::admin-side-bar"></div>
+
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+            <div class="row col-md-9 pt-2">
+                <a class="btn btn-success" href="/admin/edit">新增</a>
+                <a class="btn btn-info ml-5" href="#">修改</a>
+                <button id="_blog_del" class="btn btn-danger ml-5">删除</button>
+            </div>
+            <div class="table-responsive pt-2">
+                <table class="table table-striped table-sm">
+                    <thead>
+                    <tr>
+                        <th><input type="checkbox" id="_all_select"/></th>
+                        <th>标题</th>
+                        <th>摘要</th>
+                        <th>状态</th>
+                        <th>发布时间</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="blog :${blogs.records}">
+                        <td><input type="checkbox"/></td>
+                        <td th:text="${blog.title}"></td>
+                        <td th:text="${blog.digest}"></td>
+                        <td th:text="${blog.status}"></td>
+                        <td th:text="${#dates.format(blog.publishTime,'yyyy-MM-dd')}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+</div>
+<div th:include="admin/common::admin-footer"></div>
+</body>
+<script type="text/javascript">
+    "use strict";
+
+    function bind_del() {
+        $("#_blog_del").on("click", function () {
+
+        });
+
+        $("#_all_select").click(function () {
+
+        });
+    }
+</script>
+</html>

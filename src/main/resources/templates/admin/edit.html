@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<header th:replace="admin/common::admin-header-link"></header>
+<body>
+
+<div class="row">
+    <div th:replace="admin/common::admin-side-bar"></div>
+
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+        <div class="row  px-md-4 mt-4">
+            <button id="save_blog" class="btn btn-success">保存</button>
+        </div>
+        <hr/>
+        <div class="row px-md-4 pt-2 mb-4">
+            <span class="text-center col-md-2">标题</span>
+            <input id="_title" maxlength="128" type="text" class="col-md-3  form-control" placeholder="请输入标题">
+            <span class="text-center col-md-2">标签</span>
+            <select id="_labels" class="selectpicker form-control show-tick col-md-3" data-live-search="true"
+                    title="选择标签" multiple>
+                <option th:each="label:${labels}" th:value="${label.labelId}" th:text="${label.name}">One</option>
+            </select>
+            <!--            <input type="text" class="col-md-3  form-control" placeholder="请选择标签"/>-->
+        </div>
+        <div class="row px-md-4 pt-2 mb-4">
+            <span class="text-center col-md-2">封面</span>
+            <input id="cover_img_path" readonly class="col-md-7 form-control">
+            <button id="upload-btn" class="btn btn-primary col-md-1 form-control pl-2 btn-info">上传</button>
+        </div>
+        <div class="row px-md-4 pt-2 mb-4">
+            <span class="text-center col-md-2">摘要</span>
+            <textarea id="_digest" class="col-md-8 form-control" rows="4" maxlength="256"></textarea>
+        </div>
+        <div id="edit_area" class="col-md-8 col-lg-9 mt-4">
+
+        </div>
+    </main>
+</div>
+
+</body>
+<div th:replace="admin/common::admin-footer"></div>
+<script th:src="@{/static/ui/js/upload.js}"></script>
+<script th:src="@{/static/tinymce/tinymce.js}"></script>
+<script type="text/javascript">
+    $(function () {
+        $("#upload-btn").click(function () {
+            upload(function (res) {
+                $("#cover_img_path").val(res);
+            });
+        });
+
+        $("#save_blog").click(function () {
+            let blog = {};
+            blog.title = $("#_title").val();
+            blog.labelids = $("#_labels").val().join(",");
+            blog.showCoverPic = $("#cover_img_path").val();
+            blog.digest = $("#_digest").val();
+            blog.content = $("#edit_area").html();
+            $.ajax({
+                url: "/saveBlog",
+                data: JSON.stringify(blog),
+                type: 'POST',
+                async: true,
+                contentType: "application/json",
+                dataType: "json",
+                success: function () {
+                    alert("保存成功");
+                }
+            })
+        });
+    });
+
+    tinymce.init({
+        selector: "#edit_area",
+        language: 'zh_CN',
+        height: 500,
+        toolbar: 'undo  redo | fontselect fontsizeselect |  forecolor backcolor | bold italic underline strikethrough | ' +
+            'bullist numlist | code | hr | fullscreen |codesample preview |wordcount | image |removeformat ',
+        plugins: [
+            "advlist autolink link lists charmap hr preview wordcount", 'quickbars',
+            "searchreplace visualblocks visualchars tabfocus ", "code", "image",
+            "table   fullscreen codesample "],
+        menubar: false,
+        statusbar: false,
+        content_style: "img {max-width:100%;}",
+        font_formats: "Arial=arial,helvetica,sans-serif;"
+            + "Arial Black=arial black,avant garde;"
+            + "Times New Roman=times new roman,times;"
+            + "Courier New=courier new,courier;"
+            + "Tahoma=tahoma,arial,helvetica,sans-serif;"
+            + "Verdana=verdana,geneva;" + "宋体=SimSun;"
+            + "新宋体=NSimSun;" + "黑体=SimHei;"
+            + "微软雅黑=Microsoft YaHei",
+        block_formats: "Header 1=h1;Header 2=h2;Header 3=h3; Header 4=h4;Pre=pre;Paragraph=p",
+        quickbars_selection_toolbar: 'bold italic forecolor | link blockquote quickimage',
+        images_upload_handler: function (blobInfo, success, failure, progress) {
+            let file = blobInfo.blob();
+            upload_file(file, success, failure, progress);
+        },
+        setup: function (editor) {
+            editor.on('change', function () {
+                editor.save();
+            });
+        },
+    });
+</script>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="blog-header-link">
+    <meta charset="UTF-8">
+    <title>Blog · @Fazac</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta http-equiv="Window-target" content="_top"/>
+    <link rel="shortcut icon" th:href="@{/static/public/favicon.ico}"/>
+    <link rel="bookmark" th:href="@{/static/public/favicon.ico}"/>
+    <link rel="stylesheet" th:href="@{/static/ui/css/font-awesome.min.css}">
+    <link rel="stylesheet" th:href="@{/static/bootstrap/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/static/ui/css/blog.css}">
+    <link href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900" rel="stylesheet">
+</head>
+<body>
+<header th:fragment="blog-header" class="blog-header py-3 container">
+    <div class="row flex-nowrap justify-content-between align-items-center">
+        <div class="col-1 pt-1">
+            <a class="text-muted" href="/blog/index">Home</a>
+        </div>
+        <div th:classappend="${showSearch}?'col-7':'col-10'" th:if="${feeling != null}">
+            <div class="text-left  text-uppercase text-indent_2">
+                <a class="blog-header-logo text-muted " th:text="${feeling.marks}">Blog</a>
+            </div>
+            <div class="text-right ">
+                - <a class="blog-header-source text-muted" th:text="${feeling.source}"></a>
+            </div>
+        </div>
+        <div th:classappend="${showSearch}?'col-4':'col-1'" class="d-flex justify-content-center align-items-center">
+            <form class="d-flex" th:if="${showSearch}">
+                <input class="form-control col-12 mr-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success col-2" type="submit">
+                    <span class="fa fa-search"></span>
+                </button>
+            </form>
+            <!--            <a class="btn btn-sm btn-outline-secondary" href="/blog/login">Sign in</a>-->
+        </div>
+    </div>
+</header>
+</body>
+</html>
