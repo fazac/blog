@@ -86,10 +86,10 @@
     <label for="inputPassword" class="sr-only">Password</label>
     <input type="password" id="inputPassword" class="form-control" placeholder="Password">
     <input class="btn btn-lg btn-primary btn-block" type="button" value="Sign in"/>
-    <p class="mt-5 mb-3 text-muted">&copy; 2017-2020</p>
+    <p class="mt-5 mb-3 text-muted">&copy; 2017-2021</p>
 </div>
 </body>
-<script th:src="@{/static/jQuery/jquery-3.5.1.js}"></script>
+<script th:src="@{/static/ui/js/jquery-3.5.1.js}"></script>
 <script th:src="@{/static/ui/js/main.js}"></script>
 <script type="text/javascript">
     "use strict";
@@ -98,36 +98,26 @@
 
     }
 
-    // function doLogin() {
-    //     $.ajax({
-    //         type: "POST",
-    //         url: "/blog/user/doLogin",
-    //         data: {
-    //             "mobile": $("input[type = 'text']".val()),
-    //             "pass": $("#inputPassword".val())
-    //         },
-    //         dataType: "json",
-    //         success: function (data) {
-    //             console.log(data);
-    //             alert("success");
-    //             window.location.href(data.url);
-    //         }
-    //     });
-    // }
-
     function bind() {
         $(document).on('click', '.btn', function () {
-            $.post("/blog/user/doLogin", {
+            $.post("/user/doLogin", {
                 "mobile": $("input[type = 'text']").val(),
                 "pass": $("#inputPassword").val()
             }, function (data) {
                 console.log(data);
-                if (data.detail.bizCode < 0) {
-                    alert(data.detail.bizMessage);
+                if (data.detail.biz_code < 0) {
+                    alert(data.detail.biz_message);
                     window.location.reload();
                 } else {
-                    saveCache("token", data.detail.bizData.res.first);
-                    location.href = data.detail.bizData.url;
+                    saveCache("token", data.detail.biz_data.res.first);
+                    $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
+                        jqXHR.setRequestHeader("Authorization", "Bearer " + getCache("token"));
+                    });
+                    $.ajax({
+                        type: "GET",
+                        url: data.detail.biz_data.url,
+                    });
+                    // location.href = data.detail.biz_data.url;
                 }
             })
         });

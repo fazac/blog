@@ -23,7 +23,10 @@ public class RedirectFilter implements Filter {
                 "/resources/",
                 "/static/",
                 "/api/",
-                "/blog/"
+                "/blog/",
+                "/admin",
+                "/admin/",
+                "/user/"
         };
     }
 
@@ -69,5 +72,9 @@ public class RedirectFilter implements Filter {
             }
         }
         return false;
+    }
+
+    private boolean checkSinglePathStart(String path, String url) {
+        return path.startsWith(url);
     }
 }

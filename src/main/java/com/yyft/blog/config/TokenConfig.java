@@ -15,6 +15,8 @@ public class TokenConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(jwtIntercept)
                 .addPathPatterns("/api/**")
+                .addPathPatterns("/admin/**")
+                .excludePathPatterns("/admin")
                 .excludePathPatterns("/druid/**,/blog/**");
     }
 

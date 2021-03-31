@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:replace="blog/header::blog-header-link"></div>
+<body>
+<div th:replace="blog/header::blog-header"></div>
+<div class="container">
+    <div class="text-center">
+        <h1 th:text="${blog.title}"></h1>
+    </div>
+    <div>
+
+    </div>
+    <!--    <div class="am-g am-g-fixed blog-fixed">-->
+    <!--        <div class="am-u-lg-12 am-u-sm-12">-->
+    <!--            <article class="am-article blog-article-p article-trigger">-->
+    <!--                <div id="post-content" class="am-article-bd article-body">-->
+    <div class="col12">
+        <p class="" th:utext="${blog.content}"></p>
+        <aside class="blog-rights clearfix">
+            <p>本站文章除注明转载外，皆为作者原创，欢迎转载，但未经作者同意必须保留此段声明，且在文章页面明显位置给出原文链接，否则保留追究法律责任的权利。</p>
+        </aside>
+    </div>
+    <!--                </div>-->
+    <!--            </article>-->
+    <hr>
+    <!--        </div>-->
+    <!--    </div>-->
+</div>
+</body>
+<div th:replace="blog/footer::footer-fragment"></div>
+</html>

@@ -15,12 +15,12 @@ public class CrosConfig implements WebMvcConfigurer {
                 .maxAge(3600 * 24);
     }
 
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/**")
-                .addResourceLocations("classpath:/static/")
-                .addResourceLocations("classpath:/public/")
-                .addResourceLocations("classpath:/resources/");
-    }
+//    @Override
+//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+//        registry.addResourceHandler("/**")
+//                .addResourceLocations("classpath:/static/")
+//                .addResourceLocations("classpath:/public/")
+//                .addResourceLocations("classpath:/resources/");
+//    }
 
 }

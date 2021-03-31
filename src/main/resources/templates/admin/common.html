@@ -1,28 +1,70 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:fragment="commonHeader(title)">
-    <title th:text="${title}"></title>
-    <link th:href="@{/static/bootstrap/bootstrap.css}" rel="stylesheet">
+<head th:fragment="admin-header-link">
+    <meta charset="UTF-8">
+    <title>后台管理</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" th:href="@{/static/public/favicon.ico}"/>
+    <link rel="bookmark" th:href="@{/static/public/favicon.ico}"/>
+    <link rel="stylesheet" th:href="@{/static/ui/css/blog.css}">
+    <link rel="stylesheet" th:href="@{/static/bootstrap/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/static/ui/css/font-awesome.min.css}">
+    <link rel="stylesheet" th:href="@{/static/bootstrap_select/bootstrap-select.css}">
 </head>
 <body>
-<div th:fragment="commonNav">
-    <nav id="sidebarMenu" class="col-md-3 sidebar-sticky col-lg-2 d-md-block bg-light sidebar collapse">
-        <div class=" pt-3">
-            <ul class="nav flex-column">
-                <li class="nav-item">
-                    <a class="nav-link active" href="https://v4.bootcss.com/docs/examples/dashboard/#">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-                        Dashboard <span class="sr-only">(current)</span>
-                    </a>
-                </li>
-            </ul>
+<div th:fragment="admin-head-nav">
 
-        </div>
-    </nav>
 </div>
-<footer th:fragment="commonFooter">
+<nav id="sidebarMenu" th:fragment="admin-side-bar"
+     class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+    <div class="sidebar-sticky pt-3">
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link active" href="/admin/home">
+                    <span class="fa fa-home"></span>
+                    Dashboard <span class="sr-only">(current)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/admin/blogList/0/10">
+                    <span class="fa fa-file-text"></span>
+                    博客管理
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="https://v4.bootcss.com/docs/examples/dashboard/#">
+                    <span class="fa fa-tag"></span>
+                    标签管理
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="https://v4.bootcss.com/docs/examples/dashboard/#">
+                    <span class="fa fa-comment"></span>
+                    评论管理
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="https://v4.bootcss.com/docs/examples/dashboard/#">
+                    <span class="fa fa-key"></span>
+                    密码管理
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="https://v4.bootcss.com/docs/examples/dashboard/#">
+                    <span class="fa fa-sign-out"></span> 退出系统
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<footer th:fragment="admin-footer">
     <script th:src="@{/static/ui/js/main.js}"></script>
-    <script th:src="@{/static/jQuery/jquery-3.5.1.js}"></script>
+    <script th:src="@{/static/ui/js/jquery-3.5.1.js}"></script>
+    <!--    <script th:src="@{/static/bootstrap/popper.js}"></script>-->
+    <script src="https://cdn.bootcss.com/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script th:src="@{/static/bootstrap/bootstrap.js}"></script>
+    <script th:src="@{/static/bootstrap_select/bootstrap-select.js}"></script>
 </footer>
 </body>
 </html>

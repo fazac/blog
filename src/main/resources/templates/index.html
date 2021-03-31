@@ -1,89 +1,28 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="utf-8"/>
-    <title>Blog · @Fazac</title>
-    <meta name="description" content="这是一个 index 页面"/>
-    <meta name="keywords" content="index"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="renderer" content="webkit"/>
-    <link th:href="@{/static/bootstrap/bootstrap.css}" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900" rel="stylesheet">
-    <!--    <link rel="icon" th:href="@{/static/public/favicon.ico}" type="image/x-icon"/>-->
-    <!--    <link rel=”shortcut icon” href=”/favicon.ico” type=”image/x-icon”>-->
-    <link rel="shortcut icon" th:href="@{/static/public/favicon.ico}"/>
-    <link rel="bookmark" th:href="@{/static/public/favicon.ico}"/>
-    <link th:href="@{/static/ui/css/blog.css}" rel="stylesheet">
-
-    <style>
-        .bd-placeholder-img {
-            font-size: 1.125rem;
-            text-anchor: middle;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-        }
-
-        @media (min-width: 768px) {
-            .bd-placeholder-img-lg {
-                font-size: 3.5rem;
-            }
-        }
-    </style>
-    <link href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900" rel="stylesheet">
-</head>
+<head th:replace="blog/header::blog-header-link"></head>
 <body>
-<div class="container">
-    <header class="blog-header py-3">
-        <div class="row flex-nowrap justify-content-between align-items-center">
-            <div class="col-2 pt-1">
-                <a class="text-muted" href="#">Home Page</a>
-            </div>
-            <div class="col-8 text-center">
-                <a class="blog-header-logo text-dark" th:text="${feeling ne null ?feeling :''}">Blog</a>
-            </div>
-            <div class="col-2 d-flex justify-content-end align-items-center">
-                <a class="text-muted" href="#" aria-label="Search">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor"
-                         stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="mx-3" role="img"
-                         viewBox="0 0 24 24" focusable="false"><title>Search</title>
-                        <circle cx="10.5" cy="10.5" r="7.5"/>
-                        <path d="M21 21l-5.2-5.2"/>
-                    </svg>
-                </a>
-                <a class="btn btn-sm btn-outline-secondary" href="/blog/login">Sign in</a>
-            </div>
-        </div>
-    </header>
-    <div class="nav-scroller py-1 mb-2">
-        <nav class="nav d-flex justify-content-between">
-            <p class="p-2 text-muted" th:each="label : ${labels}" th:text="${label}"></p>
-        </nav>
-    </div>
-</div>
-<main role="main" class="container">
+<div th:replace="blog/header::blog-header"></div>
+<!--<div class="container">-->
+<!--    <div class="nav-scroller py-1 mb-2">-->
+<!--        <nav class="nav d-flex justify-content-between">-->
+<!--        </nav>-->
+<!--    </div>-->
+<!--</div>-->
+<main role="main" class="container pt-5">
     <div class="row">
         <div class="col-md-8">
-            <!--            <h3 class="pb-4 mb-4 font-italic border-bottom">-->
-            <!--                Early blogs-->
-            <!--            </h3>-->
-
-            <div class="blog-post" th:each="blog : ${blogs}">
-                <!--                <h2 class="blog-post-title" th:text="${blog.title}"></h2>-->
-                <!--                <p class="blog-post-meta " th:text="${blog.createTime}"></p>-->
-                <!--                <p th:text="${blog.digest}"></p>-->
+            <div class="blog-post" th:onclick="pageBlog([[${blog.blogId}]]);" th:each="blog : ${blogs}">
                 <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
                     <div class="col p-4 d-flex flex-column position-static">
-                        <strong class="d-inline-block mb-2 text-primary"
-                                th:text="${blog.labelids}">World</strong>
-                        <h3 class="mb-0" th:text="${blog.title}">Featured post</h3>
+                        <h3 class="mb-0 blog-post-title" th:text="${blog.title}">Featured post</h3>
                         <div class="mb-1 text-muted"
-                             th:text="${#dates.format(blog.createTime,'yyyy-MM-dd')}"></div>
+                             th:text="${#dates.format(blog.publishTime,'yyyy-MM-dd')}"></div>
                         <p class="card-text mb-auto" th:text="${blog.digest}">...</p>
-                        <a href="#" class="stretched-link">Continue reading</a>
+                        <strong class="d-inline-block mb-2 text-primary blog-post-meta"
+                                th:text="${blog.labelids}">World</strong>
                     </div>
-                    <div class="col-auto d-none d-lg-block">
+                    <div class="col-auto d-none d-lg-block" th:if="${blog.showCoverPic}">
                         <img th:src="${blog.showCoverPic}" width="200" height="250"/>
                     </div>
                 </div>
@@ -113,28 +52,28 @@
                 </ol>
             </div>
 
-            <div class="p-4">
-                <h4 class="font-italic">Elsewhere</h4>
-                <ol class="list-unstyled">
-                    <li><a href="https://github.com/fazac">GitHub</a></li>
-                    <li><a href="https://twitter.com/PFazax">Twitter</a></li>
-                    <li><a href="https://www.facebook.com/lion.fazac/">Facebook</a></li>
-                </ol>
-            </div>
+            <!--            <div class="p-4">-->
+            <!--                <h4 class="font-italic">Elsewhere</h4>-->
+            <!--                <ol class="list-unstyled">-->
+            <!--                    <li><a href="https://github.com/fazac">GitHub</a></li>-->
+            <!--                    <li><a href="https://twitter.com/PFazax">Twitter</a></li>-->
+            <!--                    <li><a href="https://www.facebook.com/lion.fazac/">Facebook</a></li>-->
+            <!--                </ol>-->
+            <!--            </div>-->
         </aside>
 
     </div>
 
 </main>
 
-<footer class="blog-footer">
-    <p>Fazac's Blog by <a href="https://twitter.com/PFazax">@Fazac</a>.</p>
-    <p>
-        <a href="#">Back to top</a>
-    </p>
-    <script th:src="@{/static/ui/js/main.js}"></script>
-    <script th:src="@{/static/jQuery/jquery-3.5.1.js}"></script>
-</footer>
 </body>
+<footer th:replace="blog/footer::footer-fragment"></footer>
+<script type="text/javascript">
+    "use strict";
 
+    function pageBlog(id) {
+        location.href = "/blog/blog/" + id;
+    }
+
+</script>
 </html>

@@ -27,22 +27,10 @@ import java.util.Objects;
  */
 @Slf4j
 @Controller
-@RequestMapping(value = "/blog/user")
+@RequestMapping(value = "/user")
 public class YfUserController {
     @Autowired
     private YfUserService yfUserService;
-
-
-
-//    @RequestMapping("doLogin")
-//    @ResponseBody
-//    public String login(Model model, @RequestParam("mobile") String mobile,
-//                        @RequestParam("pass") String pass) {
-//        log.info("mobile" + mobile + ",pass" + pass);
-//        Pair<String, String> res = yfUserService.login(mobile, pass);
-//        model.addAttribute("res", res);
-//        return "home";
-//    }
 
     @RequestMapping("doLogin")
     @ResponseBody
@@ -53,7 +41,7 @@ public class YfUserController {
         Pair<String, String> res = yfUserService.login(mobile, pass);
         Map<String, Object> resMap = new HashMap<>();
         resMap.put("res", res);
-        resMap.put("url", "home");
+        resMap.put("url", "redirect:/admin/home");
         return Result.createSuccess("ok", resMap);
     }
 }

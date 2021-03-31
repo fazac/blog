@@ -18,5 +18,6 @@ public class Feeling implements Serializable {
 
     private String marks;
 
+    private String source;
     private static final long serialVersionUID = 1L;
 }

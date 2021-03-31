@@ -77,4 +77,9 @@ create table `comment`
 alter table blog add column `version` int(4) comment '版本(乐观锁)';
 alter table label add column `type` varchar(2) comment '类型（0 分类 ，1日期）';
 
+alter table blog MODIFY COLUMN `content` mediumtext NOT NULL COMMENT '博客内容';
+alter table `label` add column `status` varchar(2) comment '状态 0 失效 ，1有效' default '1';
+alter table feeling modify column `marks` varchar(256) ;
+alter table feeling add  column `source` varchar(48) ;
+
 

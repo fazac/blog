@@ -41,7 +41,11 @@ public class BlogService {
         } else {
             wrapper.like("title", name);
         }
-        return blogMapper.selectPage(page, wrapper);
+        IPage<Blog> blogs = blogMapper.selectPage(page, wrapper);
+        blogs.getRecords().forEach(x -> {
+            x.setContent("");
+        });
+        return blogs;
     }
 
     public List<String> findCreateTime() {

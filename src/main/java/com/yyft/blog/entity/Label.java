@@ -30,5 +30,10 @@ public class Label implements Serializable {
      */
     private String type;
 
+    /**
+     * 状态
+     */
+    private String status;
+
     private static final long serialVersionUID = 1L;
 }

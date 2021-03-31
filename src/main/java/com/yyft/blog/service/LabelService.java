@@ -2,7 +2,6 @@ package com.yyft.blog.service;
 
 import com.yyft.blog.entity.Label;
 import com.yyft.blog.mapper.LabelMapper;
-import com.yyft.common.utils.text.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +28,7 @@ public class LabelService {
         if (StringUtils.isNotBlank(type)) {
             map.put("type", type);
         }
+        map.put("status", "1");
         return labelMapper.selectByMap(map);
     }
 

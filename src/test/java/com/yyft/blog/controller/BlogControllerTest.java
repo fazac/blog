@@ -80,4 +80,11 @@ public class BlogControllerTest extends BaseMock {
         assert (200 == result.getResponse().getStatus());
     }
 
+    @Test
+    public void testStringJoin() {
+        StringBuffer sb = new StringBuffer();
+        sb.append("{\"location\":\"").append("http://wwww.baidu.com").append("\"}");
+        log.info(sb.toString());
+    }
+
 }

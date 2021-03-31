@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="admin/common::commonHeader('主页')">
+<head th:replace="admin/common::admin-header-link">
 </head>
 <body>
-<div th:include="admin/common::commonNav"></div>
-<h1>Hello, world!<span class="glyphicon glyphicon-user"></span></h1>
-<div th:include="admin/common::commonFooter"></div>
+<div th:replace="admin/common::admin-head-nav"></div>
+<div th:replace="admin/common::admin-side-bar"></div>
+<div th:include="admin/common::admin-footer"></div>
 </body>
