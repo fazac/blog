@@ -1,0 +1,28 @@
+{
+    "buttons": {
+		"pageLength": "显示 %d 行",
+        "excel":"<i class='fa fa-file-excel-o'></i>&nbsp;导出Excel"
+	},
+    "decimal": "",
+    "emptyTable": "表中数据为空",
+    "info": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+    "infoEmpty": "显示第 0 至 0 项结果，共 0 项",
+    "infoFiltered": "(由 _MAX_ 项结果过滤)",
+    "InfoPostFix": "",
+    "thousands": ",",
+    "lengthMenu": "显示 _MENU_ 项结果",
+    "loadingRecords": "载入中...",
+    "processing": "处理中...",
+    "search": "搜索:",
+    "zeroRecords": "没有匹配结果",
+    "oPaginate": {
+        "sFirst": "首页",
+        "sPrevious": "上一页",
+        "sNext": "下一页",
+        "sLast": "尾页"
+    },
+    "Aria": {
+        "sSortAscending": ": 以升序排列此列",
+        "sSortDescending": ": 以降序排列此列"
+    }
+}

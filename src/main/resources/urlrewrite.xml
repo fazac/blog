@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE urlrewrite
+        PUBLIC "-//tuckey.org//DTD UrlRewrite 4.0//EN"
+        "http://www.tuckey.org/res/dtds/urlrewrite4.0.dtd">
+<urlrewrite>
+    <!--    <rule>-->
+    <!--        <from>^/some/olddir/(.*)$</from>-->
+    <!--        <to type="redirect">/very/newdir/$1</to>-->
+    <!--    </rule>-->
+
+    <rule>
+        <from>/blog/index.html</from>
+        <to type="redirect">/blog/index</to>
+    </rule>
+    <rule>
+        <from>/blog/blog/(\d+).html$</from>
+        <to type="redirect">/blog/blog/$1</to>
+    </rule>
+</urlrewrite>
