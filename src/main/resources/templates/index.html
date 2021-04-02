@@ -40,9 +40,13 @@
 
             <div class="p-4">
                 <h4 class="font-italic">Labels</h4>
-                <ol class="list-unstyled mb-0">
-                    <li th:each="label : ${labels}" th:text="${label}">March 2014</li>
-                </ol>
+                <ul class="tags mb-4 list-unstyled ">
+                    <th:block th:each="label : ${labels}">
+                        <li class="mb-3"><a class="btn a_radius border" th:href="@{/blog/search(labelid=${label.labelId})}">
+                            <th:block th:text="${label.name}">label</th:block>
+                        </a></li>
+                    </th:block>
+                </ul>
             </div>
 
             <div class="p-4">

@@ -5,15 +5,17 @@
 
 <div class="row">
     <div th:replace="admin/common::admin-side-bar"></div>
-
     <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+        <div th:replace="admin/common::admin-head-nav"></div>
         <div class="row  px-md-4 mt-4">
             <button id="save_blog" class="btn btn-success">保存</button>
         </div>
         <hr/>
         <div class="row px-md-4 pt-2 mb-4">
             <span class="text-center col-md-2">标题</span>
-            <input id="_title" maxlength="128" type="text" class="col-md-3  form-control" placeholder="请输入标题">
+            <input id="_title" maxlength="128" type="text" th:value="${blog}?${blog.title}:''"
+                   class="col-md-3  form-control"
+                   placeholder="请输入标题">
             <span class="text-center col-md-2">标签</span>
             <select id="_labels" class="selectpicker form-control show-tick col-md-3" data-live-search="true"
                     title="选择标签" multiple>
@@ -47,25 +49,32 @@
                 $("#cover_img_path").val(res);
             });
         });
-
-        $("#save_blog").click(function () {
+        $("#save_blog").one('click', function () {
+            event.preventDefault();
             let blog = {};
             blog.title = $("#_title").val();
             blog.labelids = $("#_labels").val().join(",");
             blog.showCoverPic = $("#cover_img_path").val();
             blog.digest = $("#_digest").val();
             blog.content = $("#edit_area").html();
-            $.ajax({
-                url: "/saveBlog",
-                data: JSON.stringify(blog),
-                type: 'POST',
-                async: true,
-                contentType: "application/json",
-                dataType: "json",
-                success: function () {
-                    alert("保存成功");
-                }
-            })
+            $.postJSON("/admin/saveBlog", blog, function () {
+                tipMsg("保存成功");
+                location.href = '/admin/blogList/1';
+            });
+            // $.ajax({
+            //     url: "/admin/saveBlog",
+            //     data: JSON.stringify(blog),
+            //     type: 'POST',
+            //     async: true,
+            //     contentType: "application/json",
+            //     dataType: "json",
+            //     success: function () {
+            //         tipMsg("保存成功");
+            //         window.location.href = '/admin/blogList/1';
+            //     }
+            // })
+            $(this).prop('disabled', true);
+
         });
     });
 

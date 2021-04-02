@@ -32,7 +32,7 @@ public class BlogService {
         return blogMapper.findById(id);
     }
 
-    public IPage<Blog> findBlogsByQuery(int current, int size, Integer labelid, String name) {
+    public IPage<Blog> findBlogsByQuery(int current, int size, Integer labelid, String name, String archive) {
         Page<Blog> page = new Page<>(current, size);
         QueryWrapper<Blog> wrapper = new QueryWrapper<>();
         if (labelid != null) {
@@ -54,6 +54,10 @@ public class BlogService {
 
     public boolean addBlog(Blog blog) {
         return blogMapper.insert(blog) > 0;
+    }
+
+    public boolean deleteBlogs(List<Integer> ids) {
+        return blogMapper.deleteBatchIds(ids) == ids.size();
     }
 
     @Autowired

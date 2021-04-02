@@ -2,6 +2,7 @@ package com.yyft.blog.controller;
 
 import com.yyft.blog.entity.Blog;
 import com.yyft.common.utils.mapper.JsonMapper;
+import com.yyft.common.utils.number.RandomUtil;
 import com.yyft.common.utils.time.ClockUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
@@ -82,9 +83,12 @@ public class BlogControllerTest extends BaseMock {
 
     @Test
     public void testStringJoin() {
-        StringBuffer sb = new StringBuffer();
-        sb.append("{\"location\":\"").append("http://wwww.baidu.com").append("\"}");
-        log.info(sb.toString());
+//        StringBuffer sb = new StringBuffer();
+//        sb.append("{\"location\":\"").append("http://wwww.baidu.com").append("\"}");
+//        log.info(sb.toString());
+        log.info( RandomUtil.randomAsciiFixLength(12));
+        log.info( RandomUtil.randomLetterFixLength(12));
+        log.info( RandomUtil.randomStringFixLength(12));
     }
 
 }

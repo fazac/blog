@@ -74,12 +74,33 @@ create table `comment`
     PRIMARY key (`sn`)
 );
 
-alter table blog add column `version` int(4) comment '版本(乐观锁)';
-alter table label add column `type` varchar(2) comment '类型（0 分类 ，1日期）';
+alter table blog
+    add column `version` int(4) comment '版本(乐观锁)';
+alter table label
+    add column `type` varchar(2) comment '类型（0 分类 ，1日期）';
 
-alter table blog MODIFY COLUMN `content` mediumtext NOT NULL COMMENT '博客内容';
-alter table `label` add column `status` varchar(2) comment '状态 0 失效 ，1有效' default '1';
-alter table feeling modify column `marks` varchar(256) ;
-alter table feeling add  column `source` varchar(48) ;
+alter table blog
+    MODIFY COLUMN `content` mediumtext NOT NULL COMMENT '博客内容';
+alter table `label`
+    add column `status` varchar(2) comment '状态 0 失效 ，1有效' default '1';
+alter table feeling
+    modify column `marks` varchar(256);
+alter table feeling
+    add column `source` varchar(48);
 
+-- 2021-03-31
+alter table `label`
+    modify column `name` varchar(256);
+-- 2021-04-02
+alter table blog
+    add column `is_del` tinyint(2);
 
+alter table comment
+    add column `is_del`      tinyint(2),
+    add column `status`      varchar(2) comment '0 待审核，1已审核',
+    add column `email`       varchar(40),
+    add column `name`        varchar(20),
+    add column `create_time` datetime;
+
+alter table feeling
+    add column `is_del` tinyint(2);

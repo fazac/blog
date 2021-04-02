@@ -1,5 +1,6 @@
 package com.yyft.blog;
 
+import com.baomidou.mybatisplus.extension.injector.LogicSqlInjector;
 import com.yyft.blog.tools.filter.NoCacheFilter;
 import com.yyft.blog.tools.filter.RedirectFilter;
 import com.yyft.blog.tools.filter.SelfDefineInvalidCharacterFilter;
@@ -13,6 +14,15 @@ import org.springframework.context.annotation.Bean;
 @MapperScan("com.yyft.blog.mapper")
 public class BlogApplication {
 
+//    @Bean
+//    public FilterRegistrationBean<UrlRewriteConf> rewriteFilter() {
+//        FilterRegistrationBean<UrlRewriteConf> registrationBean = new FilterRegistrationBean<>(new UrlRewriteConf());
+//        registrationBean.addUrlPatterns("/*");
+//        registrationBean.setName("rewriteFilter");
+//        registrationBean.setOrder(1);
+//        return registrationBean;
+//    }
+
     @Bean
     public FilterRegistrationBean<RedirectFilter> redirectFilter() {
         FilterRegistrationBean<RedirectFilter> registrationBean = new FilterRegistrationBean<>(new RedirectFilter());
@@ -20,6 +30,11 @@ public class BlogApplication {
         registrationBean.setName("redirectFilter");
         registrationBean.setOrder(1);
         return registrationBean;
+    }
+
+    @Bean
+    public LogicSqlInjector logicSqlInjector() {
+        return new LogicSqlInjector();
     }
 
     @Bean

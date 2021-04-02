@@ -10,10 +10,52 @@
     <link rel="stylesheet" th:href="@{/static/bootstrap/bootstrap.css}">
     <link rel="stylesheet" th:href="@{/static/ui/css/font-awesome.min.css}">
     <link rel="stylesheet" th:href="@{/static/bootstrap_select/bootstrap-select.css}">
+    <link rel="stylesheet" th:href="@{/static/dataTables/datatables.css}">
+    <link rel="stylesheet" th:href="@{/static/dataTables/DataTables-1.10.24/css/jquery.dataTables.css}">
 </head>
 <body>
 <div th:fragment="admin-head-nav">
+    <div style="position: absolute; top: 0; right: 0;" class="mt-3 mr-4">
 
+        <div id="_tip" class="toast tip hide" role="alert"
+             aria-live="assertive" data-autohide="true" data-delay="5000" data-animation="true"
+             aria-atomic="true">
+            <!--            <div class="toast-header">-->
+            <!--                <strong class="mr-auto" th:text="${tip.title}">Bootstrap</strong>-->
+            <!--                <button type="button"  class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">-->
+            <!--                    <span aria-hidden="true">&times;</span>-->
+            <!--                </button>-->
+            <!--            </div>-->
+            <button type="button" class="ml-2  mr-2 close" data-dismiss="toast"
+                    aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <!--            <a href="#" class="close" data-dismiss="toast" data-th-target="_tip" aria-label="close">&times;</a>-->
+            <div class="toast-body shadow-sm" th:text="${tip}!=null?${tip.msg}:''">
+
+            </div>
+        </div>
+
+        <div class="modal fade" id="confirm_model" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body text-indent_2 ">
+
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                        <button type="button" id="confirm_button" class="btn btn-info ml-5">确认</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <nav id="sidebarMenu" th:fragment="admin-side-bar"
      class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
@@ -26,7 +68,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/admin/blogList/0/10">
+                <a class="nav-link" href="/admin/blogList/1">
                     <span class="fa fa-file-text"></span>
                     博客管理
                 </a>
@@ -50,7 +92,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="https://v4.bootcss.com/docs/examples/dashboard/#">
+                <a class="nav-link" href="/user/logout">
                     <span class="fa fa-sign-out"></span> 退出系统
                 </a>
             </li>
@@ -59,12 +101,16 @@
 </nav>
 
 <footer th:fragment="admin-footer">
-    <script th:src="@{/static/ui/js/main.js}"></script>
     <script th:src="@{/static/ui/js/jquery-3.5.1.js}"></script>
+    <!--    <script th:src="@{/static/ui/js/underscore.js}"></script>-->
+    <script th:src="@{/static/ui/js/blogcommon.js}"></script>
+    <script th:src="@{/static/ui/js/main.js}"></script>
     <!--    <script th:src="@{/static/bootstrap/popper.js}"></script>-->
     <script src="https://cdn.bootcss.com/popper.js/1.14.7/umd/popper.min.js"></script>
     <script th:src="@{/static/bootstrap/bootstrap.js}"></script>
     <script th:src="@{/static/bootstrap_select/bootstrap-select.js}"></script>
+    <script th:src="@{/static/dataTables/datatables.js}"></script>
+    <script th:src="@{/static/dataTables/DataTables-1.10.24/js/jquery.datatables.js}"></script>
 </footer>
 </body>
 </html>

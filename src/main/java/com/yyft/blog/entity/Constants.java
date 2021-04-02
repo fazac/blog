@@ -7,11 +7,13 @@ package com.yyft.blog.entity;
  * @Version 1.0
  */
 
-public class Constants {
-    public static final int MIN_SALT_LENGTH = 10;
-    public static final int MAX_SALT_LENGTH = 13;
-    public static final int CACHE_EXPIRE_DAY = 3;
-    public static final String TOKEN_KEY_NAME = "token";
-    public static final String JWT_ISSUER = "yyft.tk";
-    public static final String LINE_SEPERATOR = "|";
+public interface Constants {
+    int MIN_SALT_LENGTH = 10;
+    int MAX_SALT_LENGTH = 13;
+    int CACHE_EXPIRE_DAY = 3;
+    int PAGE_SIZE = 8;
+    String TOKEN_KEY_NAME = "token";
+    String JWT_ISSUER = "yyft.tk";
+    String LINE_SEPERATOR = "|";
+    String ADMIN_PATH = "/admin/";
 }

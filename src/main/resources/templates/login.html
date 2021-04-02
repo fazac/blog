@@ -91,6 +91,7 @@
 </body>
 <script th:src="@{/static/ui/js/jquery-3.5.1.js}"></script>
 <script th:src="@{/static/ui/js/main.js}"></script>
+<script th:src="@{/static/ui/js/blogcommon.js}"></script>
 <script type="text/javascript">
     "use strict";
 
@@ -110,14 +111,11 @@
                     window.location.reload();
                 } else {
                     saveCache("token", data.detail.biz_data.res.first);
-                    $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
-                        jqXHR.setRequestHeader("Authorization", "Bearer " + getCache("token"));
-                    });
-                    $.ajax({
-                        type: "GET",
-                        url: data.detail.biz_data.url,
-                    });
-                    // location.href = data.detail.biz_data.url;
+                    // $.ajax({
+                    //     type: "GET",
+                    //     url: data.detail.biz_data.url,
+                    // });
+                    location.href = data.detail.biz_data.url;
                 }
             })
         });

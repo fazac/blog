@@ -49,20 +49,20 @@ public class Blog implements Serializable {
      * 创建时间
      */
     @TableField(fill = FieldFill.INSERT)
-    @JsonFormat(pattern = "yyyy-MM-dd HH-mm-ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
     /**
      * 发布时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH-mm-ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date publishTime;
 
     /**
      * 更新时间
      */
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    @JsonFormat(pattern = "yyyy-MM-dd HH-mm-ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
 
     /**
@@ -86,10 +86,17 @@ public class Blog implements Serializable {
      * 浏览数
      */
     private String viewCount;
+    /**
+     * 是否已作废
+     */
+    @TableLogic
+    @TableField(fill = FieldFill.INSERT)
+    private String isDel;
 
     /**
      * 版本号
      */
     @Version
+    @TableField(fill = FieldFill.INSERT)
     private Integer version;
 }
