@@ -18,9 +18,9 @@
                         <h3 class="mb-0 blog-post-title" th:text="${blog.title}">Featured post</h3>
                         <div class="mb-1 text-muted"
                              th:text="${#dates.format(blog.publishTime,'yyyy-MM-dd')}"></div>
-                        <p class="card-text mb-auto" th:text="${blog.digest}">...</p>
+                        <p class="card-text mb-auto text-indent_2" th:text="${blog.digest}">...</p>
                         <strong class="d-inline-block mb-2 text-primary blog-post-meta"
-                                th:text="${blog.labelids}">World</strong>
+                                th:text="${blog.labelidsName}">World</strong>
                     </div>
                     <div class="col-auto d-none d-lg-block" th:if="${blog.showCoverPic}">
                         <img th:src="${blog.showCoverPic}" width="200" height="250"/>
@@ -42,7 +42,8 @@
                 <h4 class="font-italic">Labels</h4>
                 <ul class="tags mb-4 list-unstyled ">
                     <th:block th:each="label : ${labels}">
-                        <li class="mb-3"><a class="btn a_radius border" th:href="@{/blog/search(labelid=${label.labelId})}">
+                        <li class="mb-3"><a class="btn a_radius border"
+                                            th:href="@{/blog/search(labelid=${label.labelId})}">
                             <th:block th:text="${label.name}">label</th:block>
                         </a></li>
                     </th:block>

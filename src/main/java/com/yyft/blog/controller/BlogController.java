@@ -7,6 +7,7 @@ import com.yyft.blog.entity.Label;
 import com.yyft.blog.service.BlogService;
 import com.yyft.blog.service.FeelingService;
 import com.yyft.blog.service.LabelService;
+import com.yyft.blog.tools.listener.ApplicationStartCacheListener;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @Description
@@ -39,16 +38,23 @@ public class BlogController {
     @Autowired
     private LabelService labelService;
 
+    private ApplicationStartCacheListener ac;
+
     @GetMapping("index")
     public String index(Model model) {
-        IPage<Blog> ipages = blogService.findBlogsByQuery(0, Constants.PAGE_SIZE, null, "", "");
+        IPage<Blog> ipages = blogService.findBlogsByQuery(0, Constants.FONT_PAGE_SIZE, null, "", "", "PUBLISH");
+        if (ipages.getRecords() != null) {
+            for (Blog b : ipages.getRecords()) {
+                b.setLabelidsName(ac.getLablesCache(b.getLabelids()));
+            }
+        }
         return getBlogElse(model, ipages);
     }
 
     @GetMapping("/blogs")
     public ModelAndView apiGetBlogs(@RequestParam("page") Integer page,
                                     @RequestParam("type") Integer type, @RequestParam("name") String name) {
-        return new ModelAndView("blog", "blogs", blogService.findBlogsByQuery((page - 1) * Constants.PAGE_SIZE, Constants.PAGE_SIZE, type, name, ""));
+        return new ModelAndView("blog", "blogs", blogService.findBlogsByQuery((page - 1) * Constants.PAGE_SIZE, Constants.PAGE_SIZE, type, name, "", "PUBLISH"));
     }
 
     @GetMapping("/blog/{id}")
@@ -64,7 +70,7 @@ public class BlogController {
             , @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
                          @RequestParam(value = "labelid", required = false) Integer labelid,
                          @RequestParam(value = "archive", required = false) String archive) {
-        IPage<Blog> ipages = blogService.findBlogsByQuery((page - 1) * Constants.PAGE_SIZE, Constants.PAGE_SIZE, labelid, name, archive);
+        IPage<Blog> ipages = blogService.findBlogsByQuery((page - 1) * Constants.PAGE_SIZE, Constants.PAGE_SIZE, labelid, name, archive, "PUBLISH");
         return getBlogElse(model, ipages);
     }
 
@@ -82,4 +88,8 @@ public class BlogController {
         return "index";
     }
 
+    @Autowired
+    public void setAc(ApplicationStartCacheListener ac) {
+        this.ac = ac;
+    }
 }

@@ -182,8 +182,12 @@ h1, h2, h3, h4, h5, h6 {
     border-radius: 5px;
 }
 
-::-webkit-scrollbar {
-    display: none;
+/*::-webkit-scrollbar {*/
+/*    display: none;*/
+/*}*/
+
+body {
+    overflow-x: hidden !important;
 }
 
 .text-indent_2 {
@@ -245,7 +249,7 @@ th, td {
 }
 
 .paginate_button {
-    border: 1px solid #e5e5e5!important;
+    border: 1px solid #e5e5e5 !important;
 }
 
 /*.paginate_button:hover {*/
@@ -255,9 +259,10 @@ th, td {
 /*}*/
 
 .paginate_button.disabled {
-    border:0!important;
+    border: 0 !important;
 }
 
-.sorting:before ,.sorting:after{
-    content: none!important;
+.sorting:before, .sorting:after {
+    content: none !important;
 }
+

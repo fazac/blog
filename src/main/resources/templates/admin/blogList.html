@@ -6,11 +6,10 @@
 <div class="container-fluid">
     <div class="row">
         <div th:replace="admin/common::admin-side-bar"></div>
-
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
             <div th:replace="admin/common::admin-head-nav"></div>
             <div class="row col-md-9 pt-4">
-                <a class="btn btn-success" href="/admin/edit">新增</a>
+                <a class="btn btn-success" href="/admin/createBlog">新增</a>
                 <a class="btn btn-info ml-5" id="_modify">修改</a>
                 <button data-toggle="modal" data-target="#confirm_model"
                         data-title="发布确认" data-desc="确认发布所选文章"
@@ -29,6 +28,7 @@
                     <tr>
                         <th><input type="checkbox" id="_all_select"/></th>
                         <th>标题</th>
+                        <th>分类</th>
                         <th>摘要</th>
                         <th>状态</th>
                         <th>创建时间</th>
@@ -37,15 +37,15 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="blog :${blogs.records}">
-                        <td><input type="checkbox" data-th-id="${blog.blogId}"/></td>
-                        <td th:text="${blog.title}"></td>
-                        <td th:text="${blog.digest}"></td>
-                        <td th:text="${blog.status}"></td>
-                        <td th:text="${#dates.format(blog.createTime,'yyyy-MM-dd')}"></td>
-                        <td th:text="${#dates.format(blog.publishTime,'yyyy-MM-dd')}"></td>
-                        <td th:text="${#dates.format(blog.updateTime,'yyyy-MM-dd')}"></td>
-                    </tr>
+                    <!--                    <tr th:each="blog :${blogs.records}">-->
+                    <!--                        <td><input type="checkbox" data-th-id="${blog.blogId}"/></td>-->
+                    <!--                        <td th:text="${blog.title}"></td>-->
+                    <!--                        <td th:text="${blog.digest}"></td>-->
+                    <!--                        <td th:text="${blog.status}"></td>-->
+                    <!--                        <td th:text="${#dates.format(blog.createTime,'yyyy-MM-dd')}"></td>-->
+                    <!--                        <td th:text="${#dates.format(blog.publishTime,'yyyy-MM-dd')}"></td>-->
+                    <!--                        <td th:text="${#dates.format(blog.updateTime,'yyyy-MM-dd')}"></td>-->
+                    <!--                    </tr>-->
                     </tbody>
                 </table>
             </div>
@@ -56,31 +56,120 @@
 </body>
 <script type="text/javascript">
     "use strict";
-    let dtsLanguage = "/static/ui/language/dtsLanguage.txt"
+
+    let dt;
     $(document).ready(function () {
-        $("#blog_table").DataTable({
+        dt = $("#blog_table").DataTable({
+            serverSide: true,
             destroy: true,
             bLengthChange: false,
             bAutoWidth: false,
             bInfo: true,
             ordering: true,
-            order: [4, "desc"],
+            stateSave: true,
+            pageLength: 10,
+            sPaging: true,
+            order: [6, "desc"],
+
             language: {
-                url: dtsLanguage
+                processing: "处理中...",
+                lengthMenu: "显示 _MENU_ 项结果",
+                zeroRecords: "没有匹配结果",
+                info: "共 _TOTAL_ 项",
+                infoEmpty: "共 0 项",
+                infoFiltered: "",
+                infoPostFix: "",
+                search: "搜索:",
+                searchPlaceholder: "搜索...",
+                url: "",
+                emptyTable: "表中数据为空",
+                loadingRecords: "载入中...",
+                infoThousands: ",",
+                paginate: {
+                    first: "首页",
+                    previous: "上页",
+                    next: "下页",
+                    last: "末页"
+                },
+                aria: {
+                    paginate: {
+                        first: '首页',
+                        previous: '上页',
+                        next: '下页',
+                        last: '末页'
+                    },
+                    sortAscending: ": 以升序排列此列",
+                    sortDescending: ": 以降序排列此列"
+                },
+                decimal: "-",
+                thousands: "."
             },
+            columns: [
+                {
+                    data: null, searchable: false, width: '10px',
+                    render: function (data, type, full, meta) {
+                        return " <input type='checkbox' data-id='" + full.blogId + "'/>";
+                    }
+                },
+                {data: 'title', width: '100px'},
+                {data: 'labelidsName', width: '100px', searchable: false, orderable: false},
+                {data: 'digest', width: '250px'},
+                {
+                    data: 'status', width: '40px',
+                    render: function (data, type, full, meta) {
+                        if ('CREATE' === data.trim()) {
+                            return '未发布';
+                        } else {
+                            return '已发布';
+                        }
+                    }
+                },
+                {
+                    name: 'create_time', width: '80px',
+                    data: 'createTime',
+                },
+                {
+                    name: 'publish_time', width: '80px',
+                    data: 'publishTime',
+                },
+                {
+                    name: 'update_time', width: '80px',
+                    data: 'updateTime',
+                },
+            ],
             columnDefs: [
                 {
                     targets: [0],
                     orderable: false,
+                }, {
+                    defaultContent: '',
+                    targets: ['_all'],
                 }
             ],
+            ajax: function (data, callback, setting) {
+                if (data.search.value.trim().length > 0) {
+                    data.search.value = data.search.value.replaceAll("未发布", "CREATE");
+                    data.search.value = data.search.value.replaceAll("已发布", "PUBLISH");
+                }
+                $.ajax({
+                    url: "/admin/getBlogs",
+                    type: "POST",
+                    contentType: "application/json",
+                    dataType: "json",
+                    data: JSON.stringify(data),
+                    success: function (res) {
+                        callback(res.detail.bizData);
+                    },
+                })
+            },
             createdRow: function (row, data, index) {
                 $('td', row).attr("class", "text-center");
-                let digist = $('td:nth-child(3)', row);
+                console.log(data['digest']);
+                console.log(data[4]);
+                let digist = $('td:nth-child(4)', row);
                 digist.attr("class", "text-left table-cell");
-                if (digist[0].scrollWidth > digist[0].offsetWidth) {
-                    $('td:nth-child(3)', row).prop("title", data[2]);
-                }
+                console.log(digist);
+                digist.prop("title", data['digest']);
             },
 
         });
@@ -91,13 +180,13 @@
             $("#confirm_model").modal("hide");
             tipMsg("未选择文章");
         } else {
-            console.log(Date());
             $.get("/admin/deleteBlogs", {
                 ids: ids.join(','),
             }, function (res) {
+                console.log(res);
                 $("#confirm_model").modal("hide");
-                location.reload();
-                if (res.detail.biz_data === true) {
+                dt.ajax.reload();
+                if (res.detail.bizData === true) {
                     tipMsg("删除成功");
                 } else {
                     tipMsg("删除失败");
@@ -108,13 +197,38 @@
     }
 
     function publicBlogs(ids) {
-
+        if (ids.length === 0) {
+            $("#confirm_model").modal("hide");
+            tipMsg("未选择文章");
+        } else {
+            $.get("/admin/publishBlogs", {
+                ids: ids.join(','),
+            }, function (res) {
+                $("#confirm_model").modal("hide");
+                dt.ajax.reload();
+                if (res.detail.bizData === true) {
+                    tipMsg("发布成功");
+                } else {
+                    tipMsg("发布失败");
+                }
+            });
+        }
     }
 
     $(function () {
-
         $("#_modify").click(function () {
-
+            let checkedIds = $(":checked:not(#_all_select)");
+            if (checkedIds.length > 1) {
+                tipMsg("只能选择一篇文章修改");
+            } else if (checkedIds.length === 0) {
+                tipMsg("需选择一篇文章修改");
+            } else {
+                window.location.href = "/admin/editBlog?id=" + $(checkedIds[0]).data('id');
+                // $.get("/admin/editBlog", {id: $(checkedIds[0]).data('id')}, function (res) {
+                //     // console.log(res);
+                //     // window.location.href = res.detail.biz_message;
+                // });
+            }
         });
 
         $("#_model_confirm").on("click", confirmButtonClick());

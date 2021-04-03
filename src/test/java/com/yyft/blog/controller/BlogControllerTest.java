@@ -1,6 +1,7 @@
 package com.yyft.blog.controller;
 
 import com.yyft.blog.entity.Blog;
+import com.yyft.blog.entity.Constants;
 import com.yyft.common.utils.mapper.JsonMapper;
 import com.yyft.common.utils.number.RandomUtil;
 import com.yyft.common.utils.time.ClockUtil;
@@ -20,6 +21,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 /**
  * @Description
@@ -86,9 +88,16 @@ public class BlogControllerTest extends BaseMock {
 //        StringBuffer sb = new StringBuffer();
 //        sb.append("{\"location\":\"").append("http://wwww.baidu.com").append("\"}");
 //        log.info(sb.toString());
-        log.info( RandomUtil.randomAsciiFixLength(12));
-        log.info( RandomUtil.randomLetterFixLength(12));
-        log.info( RandomUtil.randomStringFixLength(12));
+//        log.info(RandomUtil.randomAsciiFixLength(12));
+//        log.info(RandomUtil.randomLetterFixLength(12));
+//        log.info(RandomUtil.randomStringFixLength(12));
+        String lids = "|1||2||13|";
+        String s = lids.substring(1, lids.length() - 1);
+        log.info(s);
+        String[] sa = s.split("\\|\\|");
+        log.info(JsonMapper.INSTANCE.toJson(sa));
+        s = s.replace(Constants.TWO_LINE_SEPERATOR, ",");
+        log.info(s);
     }
 
 }

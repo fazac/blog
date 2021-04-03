@@ -106,16 +106,16 @@
                 "pass": $("#inputPassword").val()
             }, function (data) {
                 console.log(data);
-                if (data.detail.biz_code < 0) {
-                    alert(data.detail.biz_message);
+                if (data.detail.bizCode < 0) {
+                    alert(data.detail.bizMessage);
                     window.location.reload();
                 } else {
-                    saveCache("token", data.detail.biz_data.res.first);
+                    saveCache("token", data.detail.bizData.res.first);
                     // $.ajax({
                     //     type: "GET",
                     //     url: data.detail.biz_data.url,
                     // });
-                    location.href = data.detail.biz_data.url;
+                    location.href = data.detail.bizData.url;
                 }
             })
         });

@@ -83,6 +83,12 @@ public class Blog implements Serializable {
     private String labelids;
 
     /**
+     * 分类id
+     */
+    @TableField(exist = false)
+    private String labelidsName;
+
+    /**
      * 浏览数
      */
     private String viewCount;
@@ -99,4 +105,5 @@ public class Blog implements Serializable {
     @Version
     @TableField(fill = FieldFill.INSERT)
     private Integer version;
+
 }

@@ -28,8 +28,19 @@ public class LabelService {
         if (StringUtils.isNotBlank(type)) {
             map.put("type", type);
         }
-        map.put("status", "1");
         return labelMapper.selectByMap(map);
+    }
+
+    public boolean createLabel(Label label) {
+        return labelMapper.insert(label) == 1;
+    }
+
+    public boolean updateLabel(Label label) {
+        return labelMapper.updateById(label) == 1;
+    }
+
+    public boolean deleteLabels(List<Integer> ids) {
+        return labelMapper.deleteBatchIds(ids) == ids.size();
     }
 
     @Autowired

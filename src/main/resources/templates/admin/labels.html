@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/common::admin-header-link"></head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div th:replace="admin/common::admin-side-bar"></div>
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+            <div th:replace="admin/common::admin-head-nav"></div>
+            <div class="row col-md-9 pt-4">
+
+                <button data-toggle="modal" data-target="#edit_model"
+                        data-title="新增"
+                        class="btn btn-success ml-5">新增
+                </button>
+
+                <button data-toggle="modal" data-target="#edit_model"
+                        data-title="修改"
+                        class="btn btn-info ml-5">修改
+                </button>
+
+                <button data-toggle="modal" data-target="#confirm_model"
+                        data-title="删除确认" data-desc="确认删除所选标签"
+                        data-action="deleteLabels"
+                        class="btn btn-danger ml-5">删除
+                </button>
+            </div>
+            <div class="table-responsive w-50 pt-2">
+                <table id="label_table" class="table stripe compact hover text-center">
+                    <thead>
+                    <tr>
+                        <th><input type="checkbox" id="_all_select"/></th>
+                        <th>名称</th>
+                        <th>类型</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="label :${labels}">
+                        <td><input type="checkbox" th:data-id="${label.labelId}"/></td>
+                        <td th:text="${label.name}"></td>
+                        <td th:text="${label.status} eq '0'?'分类':'时间'"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+    <div class="modal fade" id="edit_model" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-indent_2 ">
+
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                    <button type="button" id="edit_confirm_button" class="btn btn-info ml-5">确认</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<div th:replace="admin/common::admin-footer"></div>
+<script type="text/javascript">
+    function deleteLabels(ids) {
+        console.log(ids);
+    }
+</script>
+</html>

@@ -2,42 +2,47 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <header th:replace="admin/common::admin-header-link"></header>
 <body>
+<div class="container-fluid">
+    <div class="row">
+        <div th:replace="admin/common::admin-side-bar"></div>
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+            <div th:replace="admin/common::admin-head-nav"></div>
+            <div class="row  px-md-4 mt-4">
+                <button id="save_blog" class="btn btn-success">保存</button>
+            </div>
+            <hr/>
+            <div class="row px-md-4 pt-2 mb-4">
+                <span class="text-center col-md-2">标题</span>
+                <input id="_title" maxlength="128" type="text" th:value="${blog}?${blog.title}:''"
+                       class="col-md-3  form-control" th:data-id="${blog}?${blog.blogId}:''"
+                       placeholder="请输入标题">
+                <span class="text-center col-md-2">标签</span>
+                <select id="_labels" class="selectpicker form-control show-tick col-md-3" data-live-search="true"
+                        title="选择标签" multiple>
+                    <option th:each="label:${labels}" th:value="${label.labelId}" th:text="${label.name}"
+                            th:selected="${lids != null && #lists.contains(lids,label.labelId)}?true:false"
+                    >
+                    </option>
+                </select>
+                <!--            <input type="text" class="col-md-3  form-control" placeholder="请选择标签"/>-->
+            </div>
+            <div class="row px-md-4 pt-2 mb-4">
+                <span class="text-center col-md-2">封面</span>
+                <input id="cover_img_path" th:value="${blog}?${blog.showCoverPic}:''" readonly
+                       class="col-md-7 form-control">
+                <button id="upload-btn" class="btn btn-primary col-md-1 form-control pl-2 btn-info">上传</button>
+            </div>
+            <div class="row px-md-4 pt-2 mb-4">
+                <span class="text-center col-md-2">摘要</span>
+                <textarea id="_digest" th:text="${blog}?${blog.digest}:''" class="col-md-8 form-control" rows="4"
+                          maxlength="256"></textarea>
+            </div>
+            <div id="edit_area" th:utext="${blog}?${blog.content}:''" class="col-md-8 col-lg-9 mt-4">
 
-<div class="row">
-    <div th:replace="admin/common::admin-side-bar"></div>
-    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
-        <div th:replace="admin/common::admin-head-nav"></div>
-        <div class="row  px-md-4 mt-4">
-            <button id="save_blog" class="btn btn-success">保存</button>
-        </div>
-        <hr/>
-        <div class="row px-md-4 pt-2 mb-4">
-            <span class="text-center col-md-2">标题</span>
-            <input id="_title" maxlength="128" type="text" th:value="${blog}?${blog.title}:''"
-                   class="col-md-3  form-control"
-                   placeholder="请输入标题">
-            <span class="text-center col-md-2">标签</span>
-            <select id="_labels" class="selectpicker form-control show-tick col-md-3" data-live-search="true"
-                    title="选择标签" multiple>
-                <option th:each="label:${labels}" th:value="${label.labelId}" th:text="${label.name}">One</option>
-            </select>
-            <!--            <input type="text" class="col-md-3  form-control" placeholder="请选择标签"/>-->
-        </div>
-        <div class="row px-md-4 pt-2 mb-4">
-            <span class="text-center col-md-2">封面</span>
-            <input id="cover_img_path" readonly class="col-md-7 form-control">
-            <button id="upload-btn" class="btn btn-primary col-md-1 form-control pl-2 btn-info">上传</button>
-        </div>
-        <div class="row px-md-4 pt-2 mb-4">
-            <span class="text-center col-md-2">摘要</span>
-            <textarea id="_digest" class="col-md-8 form-control" rows="4" maxlength="256"></textarea>
-        </div>
-        <div id="edit_area" class="col-md-8 col-lg-9 mt-4">
-
-        </div>
-    </main>
+            </div>
+        </main>
+    </div>
 </div>
-
 </body>
 <div th:replace="admin/common::admin-footer"></div>
 <script th:src="@{/static/ui/js/upload.js}"></script>
@@ -52,6 +57,10 @@
         $("#save_blog").one('click', function () {
             event.preventDefault();
             let blog = {};
+            let blogId = $("#_title").data('id');
+            if (blogId !== undefined) {
+                blog.blogId = blogId;
+            }
             blog.title = $("#_title").val();
             blog.labelids = $("#_labels").val().join(",");
             blog.showCoverPic = $("#cover_img_path").val();
@@ -59,7 +68,7 @@
             blog.content = $("#edit_area").html();
             $.postJSON("/admin/saveBlog", blog, function () {
                 tipMsg("保存成功");
-                location.href = '/admin/blogList/1';
+                location.href = '/admin/pageMain';
             });
             // $.ajax({
             //     url: "/admin/saveBlog",
@@ -82,12 +91,13 @@
         selector: "#edit_area",
         language: 'zh_CN',
         height: 500,
-        toolbar: 'undo  redo | fontselect fontsizeselect |  forecolor backcolor | bold italic underline strikethrough | ' +
+        nonbreaking_force_tab: true,
+        toolbar: 'undo  redo | fontselect fontsizeselect |  forecolor backcolor |alignleft aligncenter alignright |bold italic underline strikethrough | ' +
             'bullist numlist | code | hr | fullscreen |codesample preview |wordcount | image |removeformat ',
         plugins: [
             "advlist autolink link lists charmap hr preview wordcount", 'quickbars',
             "searchreplace visualblocks visualchars tabfocus ", "code", "image",
-            "table   fullscreen codesample "],
+            "table   fullscreen codesample nonbreaking "],
         menubar: false,
         statusbar: false,
         content_style: "img {max-width:100%;}",

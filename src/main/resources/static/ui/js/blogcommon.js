@@ -5,7 +5,6 @@ $(document).ajaxSend(function (event, jqxhr, settings) {
 });
 
 $(function () {
-
     let toast = $("#_tip");
     if ($(".toast-body").text().length > 0) {
         toast.toast("show");
@@ -13,7 +12,7 @@ $(function () {
             toast.toast("hide");
         }, 2000);
     }
-    
+
     toast.click(function () {
         $("#_tip").toast("hide");
     });
@@ -42,7 +41,7 @@ function confirmButtonClick(callback) {
         let ids = [];
         let checkedIds = $(":checked:not(#_all_select)");
         for (let id of checkedIds) {
-            ids.push($(id).attr('id'));
+            ids.push($(id).data('id'));
         }
         window[callback].call(this, ids);
         // let callbackFn = _.getFunction(callback, false);

@@ -18,7 +18,7 @@
     <div style="position: absolute; top: 0; right: 0;" class="mt-3 mr-4">
 
         <div id="_tip" class="toast tip hide" role="alert"
-             aria-live="assertive" data-autohide="true" data-delay="5000" data-animation="true"
+             aria-live="assertive" data-autohide="true" data-delay="5000"
              aria-atomic="true">
             <!--            <div class="toast-header">-->
             <!--                <strong class="mr-auto" th:text="${tip.title}">Bootstrap</strong>-->
@@ -68,13 +68,19 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/admin/blogList/1">
+                <a class="nav-link" href="/admin/createBlog">
+                    <span class="fa fa-file-o"></span>
+                    新增博客
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/admin/pageMain">
                     <span class="fa fa-file-text"></span>
                     博客管理
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="https://v4.bootcss.com/docs/examples/dashboard/#">
+                <a class="nav-link" href="/admin/label">
                     <span class="fa fa-tag"></span>
                     标签管理
                 </a>

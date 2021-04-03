@@ -5,9 +5,12 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yyft.blog.entity.Blog;
 import com.yyft.blog.entity.Constants;
+import com.yyft.blog.entity.vo.TableQuery;
 import com.yyft.blog.mapper.BlogMapper;
+import com.yyft.blog.util.QueryConvert;
 import com.yyft.common.utils.text.StringUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +35,7 @@ public class BlogService {
         return blogMapper.findById(id);
     }
 
-    public IPage<Blog> findBlogsByQuery(int current, int size, Integer labelid, String name, String archive) {
+    public IPage<Blog> findBlogsByQuery(int current, int size, Integer labelid, String name, String archive, String status) {
         Page<Blog> page = new Page<>(current, size);
         QueryWrapper<Blog> wrapper = new QueryWrapper<>();
         if (labelid != null) {
@@ -41,7 +44,20 @@ public class BlogService {
         } else {
             wrapper.like("title", name);
         }
+        if (!StringUtils.isBlank(status)) {
+            wrapper.eq("status", status);
+        }
         IPage<Blog> blogs = blogMapper.selectPage(page, wrapper);
+        blogs.getRecords().forEach(x -> {
+            x.setContent("");
+        });
+        return blogs;
+    }
+
+    public IPage<Blog> findByTableQuery(TableQuery tq) {
+        Page<Blog> page = QueryConvert.convertPage(tq);
+        QueryWrapper<Blog> wrapper = QueryConvert.convertWrapper(tq);
+        IPage<Blog> blogs = blogMapper.selectPage(QueryConvert.convertPage(tq), QueryConvert.convertWrapper(tq));
         blogs.getRecords().forEach(x -> {
             x.setContent("");
         });
@@ -56,8 +72,16 @@ public class BlogService {
         return blogMapper.insert(blog) > 0;
     }
 
+    public boolean updateBlog(Blog blog) {
+        return blogMapper.updateById(blog) > 0;
+    }
+
     public boolean deleteBlogs(List<Integer> ids) {
         return blogMapper.deleteBatchIds(ids) == ids.size();
+    }
+
+    public boolean publishBlogs(List<Integer> ids) {
+        return blogMapper.publishBlogs(ids) == ids.size();
     }
 
     @Autowired
