@@ -57,6 +57,7 @@
 <script type="text/javascript">
     "use strict";
 
+    let dtsLanguage = "/static/ui/language/dtsLanguage.txt"
     let dt;
     $(document).ready(function () {
         dt = $("#blog_table").DataTable({
@@ -65,44 +66,9 @@
             bLengthChange: false,
             bAutoWidth: false,
             bInfo: true,
-            ordering: true,
-            stateSave: true,
-            pageLength: 10,
-            sPaging: true,
             order: [6, "desc"],
-
             language: {
-                processing: "处理中...",
-                lengthMenu: "显示 _MENU_ 项结果",
-                zeroRecords: "没有匹配结果",
-                info: "共 _TOTAL_ 项",
-                infoEmpty: "共 0 项",
-                infoFiltered: "",
-                infoPostFix: "",
-                search: "搜索:",
-                searchPlaceholder: "搜索...",
-                url: "",
-                emptyTable: "表中数据为空",
-                loadingRecords: "载入中...",
-                infoThousands: ",",
-                paginate: {
-                    first: "首页",
-                    previous: "上页",
-                    next: "下页",
-                    last: "末页"
-                },
-                aria: {
-                    paginate: {
-                        first: '首页',
-                        previous: '上页',
-                        next: '下页',
-                        last: '末页'
-                    },
-                    sortAscending: ": 以升序排列此列",
-                    sortDescending: ": 以降序排列此列"
-                },
-                decimal: "-",
-                thousands: "."
+                url: dtsLanguage
             },
             columns: [
                 {
@@ -218,17 +184,19 @@
     $(function () {
         $("#_modify").click(function () {
             let checkedIds = $(":checked:not(#_all_select)");
-            if (checkedIds.length > 1) {
+            if (checkedIds.length === 1) {
+                window.location.href = "/admin/editBlog?id=" + $(checkedIds[0]).data('id');
+            } else if (checkedIds.length > 1) {
                 tipMsg("只能选择一篇文章修改");
             } else if (checkedIds.length === 0) {
                 tipMsg("需选择一篇文章修改");
-            } else {
-                window.location.href = "/admin/editBlog?id=" + $(checkedIds[0]).data('id');
-                // $.get("/admin/editBlog", {id: $(checkedIds[0]).data('id')}, function (res) {
-                //     // console.log(res);
-                //     // window.location.href = res.detail.biz_message;
-                // });
             }
+            // else {
+            // $.get("/admin/editBlog", {id: $(checkedIds[0]).data('id')}, function (res) {
+            //     // console.log(res);
+            //     // window.location.href = res.detail.biz_message;
+            // });
+            // }
         });
 
         $("#_model_confirm").on("click", confirmButtonClick());

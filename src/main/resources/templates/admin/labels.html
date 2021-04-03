@@ -10,12 +10,12 @@
             <div class="row col-md-9 pt-4">
 
                 <button data-toggle="modal" data-target="#edit_model"
-                        data-title="新增"
+                        data-title="标签新增" data-action="add"
                         class="btn btn-success ml-5">新增
                 </button>
 
                 <button data-toggle="modal" data-target="#edit_model"
-                        data-title="修改"
+                        data-title="标签修改" data-action="update"
                         class="btn btn-info ml-5">修改
                 </button>
 
@@ -54,8 +54,18 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body text-indent_2 ">
+                <div class="modal-body">
+                    <div class="row align-center">
+                        <span class="text-center text-middle col-md-2">标题</span>
+                        <input type="text" class="col-md-3  form-control" placeholder="请输入名称">
+                        <span class="col-md-1"></span>
+                        <span class="text-center text-middle col-md-2">类型</span>
+                        <select class=" form-control show-tick col-md-3">
+                            <option>分类</option>
+                            <option>时间</option>
+                        </select>
 
+                    </div>
                 </div>
                 <div class="modal-footer justify-content-center">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
@@ -68,8 +78,107 @@
 </body>
 <div th:replace="admin/common::admin-footer"></div>
 <script type="text/javascript">
+    "use strict"
+    let dtsLanguage = "/static/ui/language/dtsLanguage.txt"
+
+    $(document).ready(function () {
+        $("#label_table").DataTable({
+            destroy: true,
+            bLengthChange: false,
+            bAutoWidth: false,
+            bInfo: true,
+            ordering: true,
+            order: [],
+            language: {
+                url: dtsLanguage
+            },
+            columnDefs: [
+                {
+                    targets: [0],
+                    orderable: false,
+                }
+            ],
+        });
+        $('#edit_model').on('show.bs.modal', function (event) {
+            let button = $(event.relatedTarget);
+            let title = button.data('title');
+            let action = button.data('action');
+            let modal = $(this)
+            modal.find('.modal-title').text(title);
+            if ('add' === action) {
+                $('#edit_confirm_button').off("click").on("click", function () {
+                    saveLabel();
+                })
+            } else if ('update' === action) {
+                let ids = [];
+                let checkedIds = $(":checked:not(#_all_select)");
+                for (let id of checkedIds) {
+                    ids.push($(id).data('id'));
+                }
+                if (checkedIds.length === 1) {
+                    $('#edit_confirm_button').off("click").on("click", function () {
+                        updateLabel();
+                    })
+                } else if (checkedIds.length > 1) {
+                    tipMsg("只能选择一篇文章修改");
+                } else if (checkedIds.length === 0) {
+                    tipMsg("需选择一篇文章修改");
+                }
+            }
+
+        });
+    });
+
+    function saveLabel() {
+        let label = {};
+        label.name = $("#edit_model input[type='text']")[0].value;
+        label.type = $("#edit_model select")[0].value;
+        $.postJSON("/admin/label/createLabel", label, function (res) {
+            $("#edit_model").modal("hide");
+            if (res.detail.bizData === true) {
+                tipMsg("新增成功");
+                location.reload();
+            } else {
+                tipMsg("新增失败");
+            }
+        });
+    }
+
+    function updateLabel() {
+        let label = {};
+        label.labelId = $("#edit_model").data(id);
+        label.name = $("#edit_model input[type='text']")[0].value;
+        label.type = $("#edit_model select")[0].value;
+        $.postJSON("/admin/label/updateLabel", label, function (res) {
+            $("#edit_model").modal("hide");
+            if (res.detail.bizData === true) {
+                tipMsg("修改成功");
+                location.reload();
+            } else {
+                tipMsg("修改失败");
+            }
+        });
+    }
+
     function deleteLabels(ids) {
-        console.log(ids);
+        if (ids.length === 0) {
+            $("#confirm_model").modal("hide");
+            tipMsg("未选择文章");
+        } else {
+            $.get("/admin/label/deleteLabels", {
+                ids: ids.join(','),
+            }, function (res) {
+                $("#confirm_model").modal("hide");
+                if (res.detail.bizData === true) {
+                    tipMsg("删除成功");
+                    location.reload();
+                } else {
+                    tipMsg("删除失败");
+                }
+
+            });
+        }
+
     }
 </script>
 </html>

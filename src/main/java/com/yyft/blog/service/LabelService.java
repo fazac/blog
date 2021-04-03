@@ -1,5 +1,10 @@
 package com.yyft.blog.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.yyft.blog.entity.Blog;
+import com.yyft.blog.entity.Constants;
 import com.yyft.blog.entity.Label;
 import com.yyft.blog.mapper.LabelMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +35,15 @@ public class LabelService {
         }
         return labelMapper.selectByMap(map);
     }
+
+//    public IPage<Label> findLabelByPage(Integer current, String type) {
+//        Page<Label> page = new Page<>((current - 1) * Constants.PAGE_SIZE, Constants.PAGE_SIZE);
+//        QueryWrapper<Label> qw = new QueryWrapper<>();
+//        if (StringUtils.isNotBlank(type)) {
+//            qw.eq("type", type);
+//        }
+//        return labelMapper.selectPage(page, qw);
+//    }
 
     public boolean createLabel(Label label) {
         return labelMapper.insert(label) == 1;

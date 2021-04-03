@@ -30,6 +30,7 @@ public class PageConfig {
     /**
      * 打印 sql
      */
+//
 //    @Bean
 //    public PerformanceInterceptor performanceInterceptor() {
 //        PerformanceInterceptor performanceInterceptor = new PerformanceInterceptor();

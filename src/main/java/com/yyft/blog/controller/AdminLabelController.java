@@ -29,10 +29,19 @@ public class AdminLabelController {
     private LabelService labelService;
 
     @RequestMapping
-    public String pageLable(Model model) {
+    public String pageLabel(Model model) {
         model.addAttribute("labels", labelService.findByType(""));
         return "admin/labels";
     }
+
+//    @GetMapping("/{page}")
+//    public String pageLabel(Model model, @PathVariable("page") Integer page) {
+//        if (page == null) {
+//            page = 0;
+//        }
+//        model.addAttribute("labels", labelService.findLabelByPage(page, ""));
+//        return "admin/labels";
+//    }
 
     @PostMapping("modifyLabel")
     @ResponseBody
