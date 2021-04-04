@@ -49,8 +49,10 @@ public class AdminLabelController {
         if (StringUtils.isBlank(label.getName())) {
             return Result.createBizError(PARAM_IS_BLANK.code(), "参数不能为空");
         }
-        if (StringUtils.isBlank(label.getStatus())) {
+        if (StringUtils.isBlank(label.getType()) || "分类".equals(label.getType())) {
             label.setType("0");
+        } else {
+            label.setType("1");
         }
         return Result.createSuccess("ok", labelService.createLabel(label));
     }
@@ -61,8 +63,10 @@ public class AdminLabelController {
         if (StringUtils.isBlank(label.getName())) {
             return Result.createBizError(PARAM_IS_BLANK.code(), "参数不能为空");
         }
-        if (StringUtils.isBlank(label.getStatus())) {
+        if (StringUtils.isBlank(label.getType()) || "分类".equals(label.getType())) {
             label.setType("0");
+        } else {
+            label.setType("1");
         }
         return Result.createSuccess("ok", labelService.updateLabel(label));
     }

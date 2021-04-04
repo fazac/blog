@@ -9,12 +9,16 @@
             <div th:replace="admin/common::admin-head-nav"></div>
             <div class="row col-md-9 pt-4">
 
-                <button data-toggle="modal" data-target="#edit_model"
-                        data-title="标签新增" data-action="add"
+                <!--                <button data-toggle="modal" data-target="#edit_model"-->
+                <!--                        data-title="标签新增" data-action="add"-->
+                <!--                        class="btn btn-success ml-5">新增-->
+                <!--                </button>-->
+
+                <button data-title="标签新增" id="add_button"
                         class="btn btn-success ml-5">新增
                 </button>
 
-                <button data-title="标签修改" data-action="update" id="modify_button"
+                <button data-title="标签修改" id="modify_button"
                         class="btn btn-info ml-5">修改
                 </button>
 
@@ -78,7 +82,7 @@
 <div th:replace="admin/common::admin-footer"></div>
 <script type="text/javascript">
     "use strict"
-    let dtsLanguage = "/static/ui/language/dtsLanguage.txt"
+    let dtsLanguage = "/static/ui/language/dtsLanguage.txt" //必需，不然分页会报错
 
     $(document).ready(function () {
         $("#label_table").DataTable({
@@ -109,6 +113,7 @@
                 let modal = $("#edit_model");
                 modal.find('.modal-title').text($(this).data('title'));
                 modal.modal("show");
+                modal.data('id', ids[0]);
                 let _input = checkedIds[0].parentNode.nextElementSibling;
                 modal.find('input[type="text"]').val(_input.textContent);
                 let _type = _input.nextElementSibling.textContent;
@@ -126,25 +131,33 @@
             }
         });
 
-        $('#edit_model').on('show.bs.modal', function (event) {
-            let button = $(event.relatedTarget);
-            let title = button.data('title');
-            let action = button.data('action');
-            let modal = $(this)
-            modal.find('.modal-title').text(title);
-            if ('add' === action) {
-                $('#edit_confirm_button').off("click").on("click", function () {
-                    saveLabel();
-                })
-            }
+        $("#add_button").click(function () {
+            let modal = $("#edit_model");
+            modal.find('.modal-title').text($(this).data('title'));
+            modal.modal("show");
+            $('#edit_confirm_button').off("click").on("click", function () {
+                saveLabel();
+            })
         });
-    })
-    ;
+
+        // $('#edit_model').on('show.bs.modal', function (event) {
+        //     let button = $(event.relatedTarget);
+        //     let title = button.data('title');
+        //     let action = button.data('action');
+        //     let modal = $(this)
+        //     modal.find('.modal-title').text(title);
+        //     if ('add' === action) {
+        //         $('#edit_confirm_button').off("click").on("click", function () {
+        //             saveLabel();
+        //         })
+        //     }
+        // });
+    });
 
     function saveLabel() {
         let label = {};
         label.name = $("#edit_model input[type='text']")[0].value;
-        label.type = $("#edit_model select")[0].value;
+        label.type = $("#edit_model option:selected")[0].value;
         $.postJSON("/admin/label/createLabel", label, function (res) {
             $("#edit_model").modal("hide");
             if (res.detail.bizData === true) {
@@ -158,10 +171,11 @@
 
     function updateLabel() {
         let label = {};
-        label.labelId = $("#edit_model").data(id);
+        label.labelId = $("#edit_model").data('id');
         label.name = $("#edit_model input[type='text']")[0].value;
         label.type = $("#edit_model select")[0].value;
-        $.postJSON("/admin/label/updateLabel", label, function (res) {
+        console.log(label);
+        $.postJSON("/admin/label/modifyLabel", label, function (res) {
             $("#edit_model").modal("hide");
             if (res.detail.bizData === true) {
                 tipMsg("修改成功");
