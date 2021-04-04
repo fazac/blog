@@ -14,8 +14,7 @@
                         class="btn btn-success ml-5">新增
                 </button>
 
-                <button data-toggle="modal" data-target="#edit_model"
-                        data-title="标签修改" data-action="update"
+                <button data-title="标签修改" data-action="update" id="modify_button"
                         class="btn btn-info ml-5">修改
                 </button>
 
@@ -36,9 +35,9 @@
                     </thead>
                     <tbody>
                     <tr th:each="label :${labels}">
-                        <td><input type="checkbox" th:data-id="${label.labelId}"/></td>
+                        <td><input type="checkbox" th:data-id="${label.labelId}" th:data-name="${label.name}"/></td>
                         <td th:text="${label.name}"></td>
-                        <td th:text="${label.status} eq '0'?'分类':'时间'"></td>
+                        <td th:text="${label.type} eq '0'?'分类':'时间'"></td>
                     </tr>
                     </tbody>
                 </table>
@@ -88,6 +87,7 @@
             bAutoWidth: false,
             bInfo: true,
             ordering: true,
+            cache: false,
             order: [],
             language: {
                 url: dtsLanguage
@@ -99,6 +99,33 @@
                 }
             ],
         });
+        $("#modify_button").click(function () {
+            let ids = [];
+            let checkedIds = $(":checked:not(#_all_select)input[type='checkbox']");
+            for (let id of checkedIds) {
+                ids.push($(id).data('id'));
+            }
+            if (checkedIds.length === 1) {
+                let modal = $("#edit_model");
+                modal.find('.modal-title').text($(this).data('title'));
+                modal.modal("show");
+                let _input = checkedIds[0].parentNode.nextElementSibling;
+                modal.find('input[type="text"]').val(_input.textContent);
+                let _type = _input.nextElementSibling.textContent;
+                $.each(modal.find('option'), function (index, value, array) {
+                    value.selected = (_type === value.value);
+                });
+                $('#edit_confirm_button').off("click").on("click", function () {
+                    updateLabel();
+                })
+            }
+            if (checkedIds.length > 1) {
+                tipMsg("只能选择一篇文章修改");
+            } else if (checkedIds.length === 0) {
+                tipMsg("需选择一篇文章修改");
+            }
+        });
+
         $('#edit_model').on('show.bs.modal', function (event) {
             let button = $(event.relatedTarget);
             let title = button.data('title');
@@ -109,25 +136,10 @@
                 $('#edit_confirm_button').off("click").on("click", function () {
                     saveLabel();
                 })
-            } else if ('update' === action) {
-                let ids = [];
-                let checkedIds = $(":checked:not(#_all_select)");
-                for (let id of checkedIds) {
-                    ids.push($(id).data('id'));
-                }
-                if (checkedIds.length === 1) {
-                    $('#edit_confirm_button').off("click").on("click", function () {
-                        updateLabel();
-                    })
-                } else if (checkedIds.length > 1) {
-                    tipMsg("只能选择一篇文章修改");
-                } else if (checkedIds.length === 0) {
-                    tipMsg("需选择一篇文章修改");
-                }
             }
-
         });
-    });
+    })
+    ;
 
     function saveLabel() {
         let label = {};

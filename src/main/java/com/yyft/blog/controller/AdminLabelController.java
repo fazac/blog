@@ -43,9 +43,9 @@ public class AdminLabelController {
 //        return "admin/labels";
 //    }
 
-    @PostMapping("modifyLabel")
+    @PostMapping("createLabel")
     @ResponseBody
-    public Result createLabel(Label label) {
+    public Result createLabel(@RequestBody Label label) {
         if (StringUtils.isBlank(label.getName())) {
             return Result.createBizError(PARAM_IS_BLANK.code(), "参数不能为空");
         }
@@ -55,9 +55,9 @@ public class AdminLabelController {
         return Result.createSuccess("ok", labelService.createLabel(label));
     }
 
-    @PostMapping("updateLabel")
+    @PostMapping("modifyLabel")
     @ResponseBody
-    public Result updateLabel(Label label) {
+    public Result updateLabel(@RequestBody Label label) {
         if (StringUtils.isBlank(label.getName())) {
             return Result.createBizError(PARAM_IS_BLANK.code(), "参数不能为空");
         }
