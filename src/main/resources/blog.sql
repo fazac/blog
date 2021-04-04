@@ -105,6 +105,7 @@ alter table comment
 alter table feeling
     add column `is_del` tinyint(2);
 
+-- 2021-04-04
 alter table label
     modify column `status` varchar(2) default '0' comment '0有效 1无效';
 alter table `yf_usr`
