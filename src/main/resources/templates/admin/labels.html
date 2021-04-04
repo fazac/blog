@@ -39,7 +39,7 @@
                     </thead>
                     <tbody>
                     <tr th:each="label :${labels}">
-                        <td><input type="checkbox" th:data-id="${label.labelId}" th:data-name="${label.name}"/></td>
+                        <td><input type="checkbox" th:data-id="${label.labelId}"/></td>
                         <td th:text="${label.name}"></td>
                         <td th:text="${label.type} eq '0'?'分类':'时间'"></td>
                     </tr>
@@ -100,6 +100,9 @@
                 {
                     targets: [0],
                     orderable: false,
+                }, {
+                    defaultContent: '',
+                    targets: ['_all'],
                 }
             ],
         });
@@ -138,6 +141,14 @@
             $('#edit_confirm_button').off("click").on("click", function () {
                 saveLabel();
             })
+        });
+
+        $("#_all_select").click(function () {
+            if ($(this).prop("checked")) {
+                $(":checkbox").attr("checked", true);
+            } else {
+                $(":checkbox").attr("checked", false);
+            }
         });
 
         // $('#edit_model').on('show.bs.modal', function (event) {
@@ -204,7 +215,6 @@
 
             });
         }
-
     }
 </script>
 </html>

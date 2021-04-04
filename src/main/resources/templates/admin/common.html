@@ -60,46 +60,52 @@
 <nav id="sidebarMenu" th:fragment="admin-side-bar"
      class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
     <div class="sidebar-sticky pt-3">
-        <ul class="nav flex-column">
+        <ul class="nav flex-column ">
             <li class="nav-item">
-                <a class="nav-link active" href="/admin/home">
-                    <span class="fa fa-home"></span>
+                <a class="nav-link" href="/admin/home">
+                    <span class="fa nav-icon fa-home"></span>
                     Dashboard <span class="sr-only">(current)</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/admin/createBlog">
-                    <span class="fa fa-file-o"></span>
-                    新增博客
+                    <span class="fa nav-icon fa-file-o "></span>
+                    <span>新增博客</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/admin/pageMain">
-                    <span class="fa fa-file-text"></span>
+                    <span class="fa nav-icon fa-book"></span>
                     博客管理
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/admin/label">
-                    <span class="fa fa-tag"></span>
+                    <span class="fa nav-icon fa-tag"></span>
                     标签管理
                 </a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" href="/admin/feel">
+                    <span class="fa nav-icon fa-bookmark"></span>
+                    页首管理
+                </a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="https://v4.bootcss.com/docs/examples/dashboard/#">
-                    <span class="fa fa-comment"></span>
+                    <span class="fa nav-icon fa-comment"></span>
                     评论管理
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="https://v4.bootcss.com/docs/examples/dashboard/#">
-                    <span class="fa fa-key"></span>
+                    <span class="fa nav-icon fa-key"></span>
                     密码管理
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/user/logout">
-                    <span class="fa fa-sign-out"></span> 退出系统
+                    <span class="fa nav-icon fa-sign-out"></span> 退出系统
                 </a>
             </li>
         </ul>

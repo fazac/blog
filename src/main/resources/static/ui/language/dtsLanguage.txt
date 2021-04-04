@@ -6,7 +6,7 @@
     "decimal": "",
     "emptyTable": "表中数据为空",
     "info": "共 _TOTAL_ 项",
-    "infoEmpty": "显示第 0 至 0 项结果，共 0 项",
+    "infoEmpty": "共 0 项",
     "infoFiltered": "",
     "InfoPostFix": "",
     "thousands": ",",

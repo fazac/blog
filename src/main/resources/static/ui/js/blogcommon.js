@@ -29,6 +29,15 @@ $(function () {
             confirmButtonClick(action)
         })
     });
+    $(".nav-link").each(function () {
+        // console.log($(this));
+        // console.log(this);
+        $(this).removeClass("active");
+        console.log(this.href);
+        if (this.href === String(window.location)) {
+            $(this).addClass("active");
+        }
+    })
 });
 
 function tipMsg(msg) {
@@ -39,7 +48,7 @@ function tipMsg(msg) {
 function confirmButtonClick(callback) {
     if (callback) {
         let ids = [];
-        let checkedIds = $(":checked:not(#_all_select)");
+        let checkedIds = $(":checked:not(#_all_select)input[type='checkbox']");
         for (let id of checkedIds) {
             ids.push($(id).data('id'));
         }

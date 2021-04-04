@@ -1,8 +1,6 @@
 package com.yyft.blog.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,6 +24,7 @@ public class Feeling implements Serializable {
 
     private String source;
     @TableLogic
-    private Boolean isDel;
+    @TableField(fill = FieldFill.INSERT)
+    private String isDel;
     private static final long serialVersionUID = 1L;
 }

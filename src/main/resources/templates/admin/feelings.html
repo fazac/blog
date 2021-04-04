@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/common::admin-header-link"></head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div th:replace="admin/common::admin-side-bar"></div>
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+            <div th:replace="admin/common::admin-head-nav"></div>
+            <div class="row col-md-9 pt-4">
+
+                <button data-title="感言新增" id="add_button"
+                        class="btn btn-success ml-5">新增
+                </button>
+
+                <button data-toggle="modal" data-target="#confirm_model"
+                        data-title="删除确认" data-desc="确认删除所选感言"
+                        data-action="deleteLabels"
+                        class="btn btn-danger ml-5">删除
+                </button>
+            </div>
+            <div class="table-responsive  pt-2">
+                <table id="feel_table" class="table stripe compact hover text-center">
+                    <thead>
+                    <tr>
+                        <th><input type="checkbox" id="_all_select"/></th>
+                        <th>内容</th>
+                        <th>出处</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="feel :${feels}">
+                        <td style="width: 5%"><input type="checkbox" th:data-id="${feel.sn}"/></td>
+                        <td style="width: 75%" th:text="${feel.marks}"></td>
+                        <td style="width: 20%" th:text="${feel.source}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+    <div class="modal fade" id="edit_model" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row align-center">
+                        <span class="text-center text-middle col-md-2">内容</span>
+                        <input type="text" class="col-md-9  form-control" placeholder="请输入内容">
+                        <span class="text-center text-middle col-md-2 mt-4">出处</span>
+                        <input type="text" class="col-md-9  form-control mt-4" placeholder="请输入出处">
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                    <button type="button" id="edit_confirm_button" class="btn btn-info ml-5">确认</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<div th:replace="admin/common::admin-footer"></div>
+<script type="text/javascript">
+    "use strict"
+    let dtsLanguage = "/static/ui/language/dtsLanguage.txt"
+
+    $(document).ready(function () {
+        $("#feel_table").DataTable({
+            destroy: true,
+            bLengthChange: false,
+            bAutoWidth: false,
+            bInfo: true,
+            ordering: true,
+            cache: false,
+            order: [],
+            language: {
+                url: dtsLanguage
+            },
+            // columns: [
+            //     {data: null, width: '5%'},
+            //     {data: 'marks', width: '75%'},
+            //     {data: 'source', width: '20%'},
+            // ],
+            columnDefs: [
+                {
+                    targets: [0],
+                    orderable: false,
+                }, {
+                    defaultContent: '',
+                    targets: ['_all'],
+                }
+            ],
+            createdRow: function (row, data, index) {
+                let digist = $('td:nth-child(2)', row);
+                digist.attr("class", "text-left table-cell");
+                // digist.prop("title", data['marks']);
+                digist.prop("title", data[1]);
+            },
+        });
+
+        $("#add_button").click(function () {
+            let modal = $("#edit_model");
+            modal.find('.modal-title').text($(this).data('title'));
+            modal.modal("show");
+            $('#edit_confirm_button').off("click").on("click", function () {
+                saveLabel();
+            })
+        });
+
+        $("#_all_select").click(function () {
+            if ($(this).prop("checked")) {
+                $(":checkbox").attr("checked", true);
+            } else {
+                $(":checkbox").attr("checked", false);
+            }
+        });
+    });
+
+    function saveLabel() {
+        let feel = {};
+        let _input = $("#edit_model input[type='text']");
+        feel.marks = _input[0].value;
+        feel.source = _input[1].value;
+        $.postJSON("/admin/feel/createFeel", feel, function (res) {
+            $("#edit_model").modal("hide");
+            if (res.detail.bizData === true) {
+                tipMsg("新增成功");
+                location.reload();
+            } else {
+                tipMsg("新增失败");
+            }
+        });
+    }
+
+    function deleteLabels(ids) {
+        if (ids.length === 0) {
+            $("#confirm_model").modal("hide");
+            tipMsg("未选择感言");
+        } else {
+            $.get("/admin/feel/deleteFeels", {
+                ids: ids.join(','),
+            }, function (res) {
+                $("#confirm_model").modal("hide");
+                if (res.detail.bizData === true) {
+                    tipMsg("删除成功");
+                    location.reload();
+                } else {
+                    tipMsg("删除失败");
+                }
+
+            });
+        }
+    }
+</script>
+</html>

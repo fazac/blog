@@ -130,11 +130,8 @@
             },
             createdRow: function (row, data, index) {
                 $('td', row).attr("class", "text-center");
-                console.log(data['digest']);
-                console.log(data[4]);
                 let digist = $('td:nth-child(4)', row);
                 digist.attr("class", "text-left table-cell");
-                console.log(digist);
                 digist.prop("title", data['digest']);
             },
 
