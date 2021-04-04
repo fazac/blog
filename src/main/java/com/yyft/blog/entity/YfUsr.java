@@ -53,5 +53,7 @@ public class YfUsr implements Serializable {
 
     private String salt;
 
+    private String totpSk;
+    
     private static final long serialVersionUID = 1L;
 }

@@ -33,4 +33,12 @@ public class YfTokenService {
         }
         return res;
     }
+
+    public Integer findUserIdByToken(String token) {
+        Integer res = yfTokenMapper.findUserIdByToken(token);
+        if (res == null) {
+            throw new BizException(ResultCode.PERMISSION_TOKEN_INVALID.message());
+        }
+        return res;
+    }
 }

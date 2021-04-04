@@ -10,9 +10,10 @@
         <result column="uid" jdbcType="VARCHAR" property="uid"/>
         <result column="password" jdbcType="VARCHAR" property="password"/>
         <result column="salt" jdbcType="VARCHAR" property="salt"/>
+        <result column="totp_sk" jdbcType="VARCHAR" property="totpSk"/>
     </resultMap>
     <sql id="Base_Column_List">
-        sn, `name`, phone, email, img, `uid`, `password`, salt
+        sn, `name`, phone, email, img, `uid`, `password`, salt ,`totp_sk`
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
@@ -25,6 +26,13 @@
         <include refid="Base_Column_List"/>
         from yf_usr
         where phone = #{mobile,jdbcType=VARCHAR} and password = #{pass,jdbcType=VARCHAR}
+    </select>
+
+    <select id="findByMobile" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from yf_usr
+        where phone = #{mobile,jdbcType=VARCHAR}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete
@@ -114,6 +122,9 @@
             <if test="salt != null">
                 salt = #{salt,jdbcType=VARCHAR},
             </if>
+            <if test="totpSk != null">
+                totp_sk = #{totpSk,jdbcType=VARCHAR},
+            </if>
         </set>
         where sn = #{sn,jdbcType=INTEGER}
     </update>
@@ -125,7 +136,8 @@
         img = #{img,jdbcType=VARCHAR},
         `uid` = #{uid,jdbcType=VARCHAR},
         `password` = #{password,jdbcType=VARCHAR},
-        salt = #{salt,jdbcType=VARCHAR}
+        salt = #{salt,jdbcType=VARCHAR},
+        `totp_sk` = #{totpSk ,jdbcType=VARCHAR}
         where sn = #{sn,jdbcType=INTEGER}
     </update>
 </mapper>

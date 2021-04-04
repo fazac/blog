@@ -5,6 +5,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface YfUsrMapper {
     int deleteByPrimaryKey(Integer sn);
@@ -20,4 +22,6 @@ public interface YfUsrMapper {
     int updateByPrimaryKey(YfUsr record);
 
     YfUsr findByMobilePass(String mobile, String pass);
+
+    List<YfUsr> findByMobile(String mobile);
 }

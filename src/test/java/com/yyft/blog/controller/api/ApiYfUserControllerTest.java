@@ -1,7 +1,6 @@
 package com.yyft.blog.controller.api;
 
 import com.yyft.blog.controller.BaseMock;
-import com.yyft.blog.controller.api.ApiYfUserController;
 import com.yyft.blog.entity.YfUsr;
 import com.yyft.common.utils.mapper.JsonMapper;
 import com.yyft.common.utils.security.MD5Util;
@@ -45,7 +44,7 @@ public class ApiYfUserControllerTest extends BaseMock {
     }
 
 
-//    @Test
+    //    @Test
     @Rollback(false)
     public void register() throws Exception {
         String uri = "/usr/register";

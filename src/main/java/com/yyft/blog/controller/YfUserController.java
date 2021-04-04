@@ -2,6 +2,8 @@ package com.yyft.blog.controller;
 
 import com.yyft.blog.entity.Constants;
 import com.yyft.blog.service.YfUserService;
+import com.yyft.common.model.BizException;
+import com.yyft.common.model.BizResultVO;
 import com.yyft.common.model.Result;
 import com.yyft.common.model.ResultCode;
 import com.yyft.common.utils.collection.type.Pair;
@@ -35,6 +37,7 @@ public class YfUserController {
     @Autowired
     private YfUserService yfUserService;
 
+
     @RequestMapping("doLogin")
     @ResponseBody
     public Result login(@RequestParam("mobile") String mobile, @RequestParam("pass") String pass,
@@ -46,13 +49,18 @@ public class YfUserController {
         Map<String, Object> resMap = new HashMap<>();
         resMap.put("res", res);
         resMap.put("url", "/admin/home");
-        request.getSession().setAttribute("access_token", res.getFirst());
-        Cookie cookie_username = new Cookie("cookie_username", RandomUtil.randomLetterFixLength(12));
-        cookie_username.setMaxAge(30 * 24 * 60 * 60);
-        log.info(request.getContextPath());
-        cookie_username.setPath(Constants.ADMIN_PATH);
-        // 向客户端发送cookie
-        response.addCookie(cookie_username);
+        //todo 将cookie和token放到redis
+        if (res != null) {
+            request.getSession().setAttribute("access_token", res.getFirst());
+            Cookie cookie_username = new Cookie("cookie_username", RandomUtil.randomLetterFixLength(12));
+            cookie_username.setMaxAge(30 * 24 * 60 * 60);
+            log.info(request.getContextPath());
+            cookie_username.setPath(Constants.ADMIN_PATH);
+            // 向客户端发送cookie
+            response.addCookie(cookie_username);
+        } else {
+            return Result.createBizError(-ResultCode.USER_LOGIN_ERROR.code(), "账号不存在或密码错误");
+        }
         return Result.createSuccess("ok", resMap);
     }
 

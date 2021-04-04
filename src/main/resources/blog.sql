@@ -107,3 +107,5 @@ alter table feeling
 
 alter table label
     modify column `status` varchar(2) default '0' comment '0有效 1无效';
+alter table `yf_usr`
+    add column `totp_sk` varchar(32);

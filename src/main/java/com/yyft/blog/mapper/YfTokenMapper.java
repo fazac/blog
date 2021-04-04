@@ -22,4 +22,6 @@ public interface YfTokenMapper {
     YfToken getByUserId(Integer sn, Date date);
 
     String findPublicKeyByToken(String token);
+
+    Integer findUserIdByToken(String token);
 }

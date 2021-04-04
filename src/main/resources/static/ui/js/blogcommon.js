@@ -33,7 +33,6 @@ $(function () {
         // console.log($(this));
         // console.log(this);
         $(this).removeClass("active");
-        console.log(this.href);
         if (this.href === String(window.location)) {
             $(this).addClass("active");
         }

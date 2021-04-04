@@ -35,6 +35,10 @@
     <select id="findPublicKeyByToken" resultType="java.lang.String">
         select public_key from yf_token where token = #{token,jdbcType=VARCHAR}
     </select>
+    <select id="findUserIdByToken" resultType="java.lang.Integer">
+        select user_sn from yf_token where token = #{token,jdbcType=VARCHAR}
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete
         from yf_token
