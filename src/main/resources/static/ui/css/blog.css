@@ -213,7 +213,13 @@ body {
     margin-left: 10px;
 }
 
-.tags li a:hover, .tags a:active {
+/*.tags li a:hover, .tags a:active {*/
+/*    color: #007bff;*/
+/*    border-color: #007bff;*/
+/*    box-shadow: 2px 3px 4px rgba(0, 0, 0, .5);*/
+/*}*/
+
+.s-param-lid:hover, .s-param-lid.active, .s-param-archive:hover, .s-param-archive.active, .s-param-page:not(.disabled):hover {
     color: #007bff;
     border-color: #007bff;
     box-shadow: 2px 3px 4px rgba(0, 0, 0, .5);

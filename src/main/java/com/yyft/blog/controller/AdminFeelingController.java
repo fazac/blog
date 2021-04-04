@@ -25,7 +25,7 @@ import static com.yyft.common.model.ResultCode.PARAM_IS_BLANK;
 @Slf4j
 @Controller
 @RequestMapping(value = "/admin/feel")
-public class AminFeelingController {
+public class AdminFeelingController {
 
     private FeelingService feelingService;
 

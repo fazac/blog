@@ -27,12 +27,13 @@
             </div>
         </div>
         <div th:classappend="${showSearch}?'col-4':'col-1'" class="d-flex justify-content-center align-items-center">
-            <form class="d-flex" th:if="${showSearch}">
-                <input class="form-control col-12 mr-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success col-2" type="submit">
+            <th:block class="d-flex" th:if="${showSearch}">
+                <input class="form-control col-10 mr-2" type="search" placeholder="Search"
+                       aria-label="Search">
+                <button class="btn btn-outline-success col-2" id="search_btn">
                     <span class="fa fa-search"></span>
                 </button>
-            </form>
+            </th:block>
             <!--            <a class="btn btn-sm btn-outline-secondary" href="/blog/login">Sign in</a>-->
         </div>
     </div>

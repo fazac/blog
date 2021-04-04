@@ -1,9 +1,7 @@
 package com.yyft.blog.util;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.yyft.blog.entity.Blog;
 import com.yyft.blog.entity.vo.TQColumn;
 import com.yyft.blog.entity.vo.TQOrder;
 import com.yyft.blog.entity.vo.TableQuery;

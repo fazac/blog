@@ -53,7 +53,9 @@ public class ApplicationStartCacheListener implements ApplicationListener<Contex
             StringBuffer sb = new StringBuffer();
             String[] keys = key.substring(1, key.length() - 1).split("\\|\\|");
             for (int i = 0; i < keys.length; i++) {
-                sb.append(labelsMap.get(keys[i])).append("  ");
+                if (labelsMap.containsKey(keys[i])) {
+                    sb.append(labelsMap.get(keys[i])).append("  ");
+                }
             }
             String res = sb.toString();
             sb = null;

@@ -8,12 +8,15 @@ import com.yyft.blog.entity.Constants;
 import com.yyft.blog.entity.vo.TableQuery;
 import com.yyft.blog.mapper.BlogMapper;
 import com.yyft.blog.util.QueryConvert;
+import com.yyft.common.utils.mapper.JsonMapper;
 import com.yyft.common.utils.text.StringUtil;
+import com.yyft.common.utils.time.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -39,14 +42,21 @@ public class BlogService {
         Page<Blog> page = new Page<>(current, size);
         QueryWrapper<Blog> wrapper = new QueryWrapper<>();
         if (labelid != null) {
-            wrapper.like("labelids", StringUtil.surroundSeperator(labelid.toString(), Constants.LINE_SEPERATOR))
-                    .like("title", name);
-        } else {
-            wrapper.like("title", name);
+            wrapper.like("labelids", StringUtil.surroundSeperator(labelid.toString(), Constants.LINE_SEPERATOR));
+        }
+        if (StringUtils.isNotBlank(name)) {
+            wrapper.and(x -> x.or().like("title", name).or().like("digest", name));
+        }
+        if (StringUtils.isNotBlank(archive)) {
+            Date d = DateUtil.toDate(archive.replace(" ", "") + "-01 00:00:00", "yyyy-MM-dd HH:mm:ss");
+            wrapper.lt("publish_time", DateUtil.getMonthEnd(d, 0));
+            wrapper.ge("publish_time", DateUtil.getMonthStart(d, 0));
         }
         if (!StringUtils.isBlank(status)) {
             wrapper.eq("status", status);
         }
+        wrapper.orderByDesc("publish_time");
+        log.info("page:" + JsonMapper.INSTANCE.toJson(page));
         IPage<Blog> blogs = blogMapper.selectPage(page, wrapper);
         blogs.getRecords().forEach(x -> {
             x.setContent("");

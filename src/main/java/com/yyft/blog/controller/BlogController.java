@@ -8,6 +8,7 @@ import com.yyft.blog.service.BlogService;
 import com.yyft.blog.service.FeelingService;
 import com.yyft.blog.service.LabelService;
 import com.yyft.blog.tools.listener.ApplicationStartCacheListener;
+import com.yyft.common.utils.mapper.JsonMapper;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,18 +68,19 @@ public class BlogController {
 
     @GetMapping("search")
     public String search(Model model, @RequestParam(value = "name", required = false) String name
-            , @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
+            , @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
                          @RequestParam(value = "labelid", required = false) Integer labelid,
                          @RequestParam(value = "archive", required = false) String archive) {
-        IPage<Blog> ipages = blogService.findBlogsByQuery((page - 1) * Constants.PAGE_SIZE, Constants.PAGE_SIZE, labelid, name, archive, "PUBLISH");
+        IPage<Blog> ipages = blogService.findBlogsByQuery(page, Constants.FONT_PAGE_SIZE, labelid, name, archive, "PUBLISH");
         return getBlogElse(model, ipages);
     }
 
     private String getBlogElse(Model model, IPage<Blog> ipages) {
         List<Label> labels = labelService.findByType("0");
         List<Blog> blogs = ipages.getRecords();
+        log.info(ipages.getTotal() + " " + ipages.getCurrent() + " " + ipages.getSize() + " " + ipages.getPages());
         model.addAttribute("blogs", blogs);
-        model.addAttribute("page", ipages.getSize());
+        model.addAttribute("page", ipages.getPages());
         model.addAttribute("current", ipages.getCurrent());
         List<String> archives = blogService.findCreateTime();
         model.addAttribute("archives", archives);
