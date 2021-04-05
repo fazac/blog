@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yyft.blog.entity.Comment;
 import com.yyft.blog.entity.Constants;
 import com.yyft.blog.entity.vo.TableQuery;
+import com.yyft.blog.mapper.BlogMapper;
 import com.yyft.blog.mapper.CommentMapper;
 import com.yyft.blog.util.QueryConvert;
 import com.yyft.common.utils.time.ClockUtil;
@@ -23,6 +24,8 @@ import java.util.List;
 public class CommentService {
     private CommentMapper commentMapper;
 
+    private BlogMapper blogMapper;
+
     private JavaMailSender javaMailSender;
 
     public boolean addComment(Comment comment) {
@@ -36,28 +39,47 @@ public class CommentService {
         return commentMapper.updateComment(cids, viewable) == cids.size();
     }
 
+    public List<Comment> findCommentsByBlogId(Integer bid) {
+        QueryWrapper<Comment> qw = new QueryWrapper<>();
+        if (bid != null) {
+            qw.eq("bid", bid);
+        }
+        qw.eq("type", "0");
+        qw.orderByDesc("create_time");
+        return commentMapper.selectList(qw);
+    }
+
     public IPage<Comment> findFrontCommentByBlogId(Integer bid, Integer current) {
         QueryWrapper<Comment> qw = new QueryWrapper<>();
         Page<Comment> page = new Page<>(current, Constants.FONT_PAGE_SIZE);
-        qw.eq("bid", bid);
+        if (bid != null) {
+            qw.eq("bid", bid);
+        }
         qw.eq("type", "0");
         qw.orderByDesc("create_time");
         IPage<Comment> comments = commentMapper.selectPage(page, qw);
-        return initPage(comments);
+        return initPage(comments, bid != null, false);
     }
 
     public IPage<Comment> findByTableQuery(TableQuery tq) {
         QueryWrapper<Comment> qw = QueryConvert.convertWrapper(tq);
         qw.eq("type", "0");
         IPage<Comment> comments = commentMapper.selectPage(QueryConvert.convertPage(tq), qw);
-        return initPage(comments);
+        return initPage(comments, true, true);
     }
 
-    private IPage<Comment> initPage(IPage<Comment> comments) {
+    private IPage<Comment> initPage(IPage<Comment> comments, boolean showContent, boolean showEmail) {
         if (comments.getRecords() != null && !comments.getRecords().isEmpty()) {
             comments.getRecords().forEach(x -> {
                 if (x.getSid() != null) {
                     x.setSComment(commentMapper.selectById(x.getSid()));
+                }
+                x.setCommentTarget(blogMapper.findTitleById(x.getBid()));
+                if (!showContent) {
+                    x.setContent("");
+                }
+                if (!showEmail) {
+                    x.setEmail("");
                 }
             });
         }
@@ -76,13 +98,17 @@ public class CommentService {
         commentMapper.insert(comment);
         source.setStatus("1");
         source.setSid(comment.getSn());
-        if ("1".equals(source.getReEmail())) {
-            SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-            simpleMailMessage.setTo();
-            simpleMailMessage.setFrom("1650031931@qq.com");
-            simpleMailMessage.setSubject(Constants.JWT_ISSUER + " 回复:" + source.getContent());
-            simpleMailMessage.setText(reply);
-            javaMailSender.send(simpleMailMessage);
+        try {
+            if (source.getReEmail()) {
+                SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+                simpleMailMessage.setTo(source.getEmail());
+                simpleMailMessage.setFrom("1650031931@qq.com");
+                simpleMailMessage.setSubject(Constants.JWT_ISSUER + " 回复:" + source.getContent());
+                simpleMailMessage.setText(reply);
+                javaMailSender.send(simpleMailMessage);
+            }
+        } catch (Exception e) {
+            log.error("发送邮件出错", e);
         }
         commentMapper.updateById(source);
     }
@@ -95,5 +121,10 @@ public class CommentService {
     @Autowired
     public void setJavaMailSender(JavaMailSender javaMailSender) {
         this.javaMailSender = javaMailSender;
+    }
+
+    @Autowired
+    public void setBlogMapper(BlogMapper blogMapper) {
+        this.blogMapper = blogMapper;
     }
 }

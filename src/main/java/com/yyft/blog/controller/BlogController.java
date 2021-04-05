@@ -2,24 +2,25 @@ package com.yyft.blog.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.yyft.blog.entity.Blog;
+import com.yyft.blog.entity.Comment;
 import com.yyft.blog.entity.Constants;
 import com.yyft.blog.entity.Label;
 import com.yyft.blog.service.BlogService;
+import com.yyft.blog.service.CommentService;
 import com.yyft.blog.service.FeelingService;
 import com.yyft.blog.service.LabelService;
 import com.yyft.blog.tools.listener.ApplicationStartCacheListener;
 import com.yyft.common.utils.mapper.JsonMapper;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -38,6 +39,8 @@ public class BlogController {
     private FeelingService feelingService;
     @Autowired
     private LabelService labelService;
+
+    private CommentService commentService;
 
     private ApplicationStartCacheListener ac;
 
@@ -61,8 +64,14 @@ public class BlogController {
     @GetMapping("/blog/{id}")
     public String findBlogById(Model model, @NonNull @PathVariable("id") Integer id) {
         Blog blog = blogService.findById(id);
+        List<Comment> comments = commentService.findCommentsByBlogId(id);
+        model.addAttribute("comments", comments);
         model.addAttribute("blog", blog);
         model.addAttribute("feeling", feelingService.getLastFeeling());
+        Comment comment = new Comment();
+        comment.setReEmail(true);
+        comment.setBid(id);
+        model.addAttribute("nComment", comment);
         return "/blog/blog";
     }
 
@@ -78,7 +87,6 @@ public class BlogController {
     private String getBlogElse(Model model, IPage<Blog> ipages) {
         List<Label> labels = labelService.findByType("0");
         List<Blog> blogs = ipages.getRecords();
-        log.info(ipages.getTotal() + " " + ipages.getCurrent() + " " + ipages.getSize() + " " + ipages.getPages());
         model.addAttribute("blogs", blogs);
         model.addAttribute("page", ipages.getPages());
         model.addAttribute("current", ipages.getCurrent());
@@ -87,11 +95,26 @@ public class BlogController {
         model.addAttribute("labels", labels);
         model.addAttribute("showSearch", Boolean.TRUE);
         model.addAttribute("feeling", feelingService.getLastFeeling());
+        List<Comment> comments = commentService.findFrontCommentByBlogId(null, 1).getRecords();
+        model.addAttribute("comments", comments);
         return "index";
+    }
+
+    @PostMapping("/commitComment")
+    public String commitComment(@ModelAttribute Comment comment) {
+        commentService.addComment(comment);
+        return "redirect:/blog/blog/" + comment.getBid();
+//        return "/blog/blog";
     }
 
     @Autowired
     public void setAc(ApplicationStartCacheListener ac) {
         this.ac = ac;
     }
+
+    @Autowired
+    public void setCommentService(CommentService commentService) {
+        this.commentService = commentService;
+    }
+
 }

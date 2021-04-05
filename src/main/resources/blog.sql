@@ -119,3 +119,8 @@ alter table `comment`
     add column `re_email` varchar(2) comment '0无需email回复,1需email回复';
 alter table `comment`
     add column `viewable` varchar(2) comment '是否可见';
+alter table `comment`
+    add column `site` varchar(20) comment '站点';
+
+alter table `comment`
+    modify column `re_email` tinyint(2) comment '0无需email回复,1需email回复';

@@ -43,7 +43,7 @@
 
             <div class="p-4">
                 <h4 class="font-italic">Labels</h4>
-                <ul class="tags mb-4 list-unstyled ">
+                <ul class="tags mb-4 mt-4 list-unstyled ">
                     <th:block th:each="label : ${labels}">
                         <li class="mb-3"><a class="btn a_radius border s-param-lid" data-th-id="${label.labelId}"
                         >
@@ -55,11 +55,25 @@
 
             <div class="p-4" style="margin-top: 300px">
                 <h4 class="font-italic">Archives</h4>
-                <ol class="tags list-unstyled mb-0">
+                <ol class="tags list-unstyled mb-0 mt-4">
                     <th:block th:each="archive : ${archives}">
                         <li class="mb-3"><a class="btn  border s-param-archive">
                             <th:block th:text="${archive}">label</th:block>
                         </a></li>
+                    </th:block>
+                </ol>
+            </div>
+
+            <div class="p-4" style="margin-top: 300px">
+                <h4 class="font-italic">Comments</h4>
+                <ol class="list-unstyled mb-0 mt-4">
+                    <th:block th:each="comment : ${comments}">
+                        <li class="mb-3 ml-2">
+                            <span th:text="${comment.name}"></span> 发表在 《
+                            <a class="comment-link" th:href="@{/blog/blog/{id}(id=${comment.bid})}">
+                                <th:block th:text="${comment.commentTarget}"></th:block>
+                            </a>》
+                        </li>
                     </th:block>
                 </ol>
             </div>

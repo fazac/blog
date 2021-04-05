@@ -225,6 +225,16 @@ body {
     box-shadow: 2px 3px 4px rgba(0, 0, 0, .5);
 }
 
+.comment-link {
+    color: black;
+}
+
+.comment-link:hover {
+    color: #007bff;
+    text-decoration: none;
+    cursor: pointer;
+}
+
 .tip {
     min-width: 250px;
     font-weight: bold;

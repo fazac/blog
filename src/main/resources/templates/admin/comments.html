@@ -211,7 +211,7 @@
         }, function (res) {
             $("#edit_model").modal("hide");
             dt.ajax.reload();
-            if (res.detail.bizData === true) {
+            if (res.detail.bizCode === 1) {
                 tipMsg("回复成功");
             } else {
                 tipMsg("回复失败");

@@ -8,7 +8,6 @@ import com.yyft.blog.entity.Constants;
 import com.yyft.blog.entity.vo.TableQuery;
 import com.yyft.blog.mapper.BlogMapper;
 import com.yyft.blog.util.QueryConvert;
-import com.yyft.common.utils.mapper.JsonMapper;
 import com.yyft.common.utils.text.StringUtil;
 import com.yyft.common.utils.time.ClockUtil;
 import com.yyft.common.utils.time.DateFormatUtil;
@@ -19,8 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
-import java.time.temporal.ChronoUnit;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -61,7 +58,6 @@ public class BlogService {
             wrapper.eq("status", status);
         }
         wrapper.orderByDesc("publish_time");
-        log.info("page:" + JsonMapper.INSTANCE.toJson(page));
         IPage<Blog> blogs = blogMapper.selectPage(page, wrapper);
         blogs.getRecords().forEach(x -> {
             x.setContent("");

@@ -43,12 +43,17 @@ public class Comment implements Serializable {
 
     private String type;
 
-    private String reEmail;
+    private Boolean reEmail;
+
+    private String site;
 
     private String viewable;
 
     @TableField(exist = false)
     private Comment sComment;
+
+    @TableField(exist = false)
+    private String commentTarget;
 
 
     private static final long serialVersionUID = 1L;

@@ -16,15 +16,64 @@
     <!--                <div id="post-content" class="am-article-bd article-body">-->
     <div class="col12">
         <p class="" th:utext="${blog.content}"></p>
+        <hr>
+        <div class="mt-5">
+            <h4>评论</h4>
+            <div>
+                <div class="ml-4 border-bottom" th:each="comment : ${comments}">
+                    <p class="mb-0 mt-4" th:text="${comment.name}"></p>
+                    <div class="mb-1 text-muted"
+                         th:text="${#dates.format(comment.createTime,'yyyy-MM-dd hh:mm')}"></div>
+                    <p class="text-muted text-indent_2" th:text="${comment.content}">...</p>
+                    <div class=" card-text text-muted " th:if="${comment.sComment}">
+                        回复 :
+                        <div class="mb-1 text-muted text-indent_2"
+                             th:text="${comment.sComment}!=null ?${comment.sComment.content}:''"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-5 mb-3">
+            <h4>添加评论</h4>
+            <span class="text-muted font-weight-light ml-2">邮箱地址不会被公开。 必填项已用<span style="color: red"> * </span>标注</span>
+
+            <form id="comment_input" class="mt-3 text-muted" method="post" th:action="@{/blog/commitComment}"
+                  th:object="${nComment}">
+                <input th:field="*{bid}" th:value="${bid}" style="display: none">
+                <div class="mt-2">评论</div>
+                <textarea class="form-control" maxlength="250" th:field="*{content}" rows="6">
+
+                </textarea>
+                <div class="mt-2">
+                    称呼<span style="color: red"> * </span>
+                </div>
+                <input type="text" maxlength="10" th:field="*{name}" class="col-6 form-control">
+                <div class="mt-2">
+                    邮件地址<span style="color: red"> * </span>
+                </div>
+                <input class="col-6 form-control" th:field="*{email}" maxlength="30">
+                <div class="mt-2">
+                    站点
+                </div>
+                <input type="text" maxlength="20" th:field="*{site}" class="col-6 form-control">
+
+                <div class="mt-2 align-baseline">
+                    <span>
+                    <span class="col2">
+                        回复邮件通知
+                    </span>
+                    <input type="checkbox" th:field="*{reEmail}" style="zoom: 110%;"></span>
+                </div>
+
+                <input class="btn mt-4 btn-info" type="submit" value="提交评论">
+            </form>
+        </div>
         <aside class="blog-rights clearfix">
             <p>本站文章除注明转载外，皆为作者原创，欢迎转载，但未经作者同意必须保留此段声明，且在文章页面明显位置给出原文链接，否则保留追究法律责任的权利。</p>
         </aside>
     </div>
-    <!--                </div>-->
-    <!--            </article>-->
     <hr>
-    <!--        </div>-->
-    <!--    </div>-->
 </div>
 </body>
 <div th:replace="blog/footer::footer-fragment"></div>

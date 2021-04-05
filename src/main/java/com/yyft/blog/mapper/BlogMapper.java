@@ -28,6 +28,10 @@ public interface BlogMapper extends BaseMapper<Blog> {
     @Select("select * from blog where blog_id =#{id}")
     Blog findById(Integer id);
 
+
+    @Select("select title from blog where blog_id =#{id}")
+    String findTitleById(Integer id);
+
     @Select("<script> " +
             " select * from blog  " +
             " <trim prefix='where' suffixOverrides=','> " +
