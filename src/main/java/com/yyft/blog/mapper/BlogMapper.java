@@ -4,10 +4,12 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.yyft.blog.entity.Blog;
 import com.yyft.blog.entity.query.BlogQuery;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -35,11 +37,11 @@ public interface BlogMapper extends BaseMapper<Blog> {
             " </trim> limit #{page} ,#{pageSize} </script>")
     List<Blog> findBlogsByQuery(BlogQuery blogQuery);
 
-    @Update("<script> update blog set status = 'PUBLISH',publish_time = now() where blog_id in" +
+    @Update("<script> update blog set status = 'PUBLISH',publish_time = #{date,jdbcType=TIMESTAMP} where blog_id in" +
             " <foreach item='id' " +
-            " collection='list' separator=',' open='(' close=')' index=''> " +
+            " collection='ids' separator=',' open='(' close=')' index=''> " +
             " #{id, jdbcType=INTEGER} </foreach> </script>")
-    int publishBlogs(List<Integer> ids);
+    int publishBlogs(@Param("ids") List<Integer> ids, Date date);
 
     @Select("select DISTINCT(DATE_FORMAT(publish_time,'%Y - %m')) date from blog where is_del = '0' order by date desc;")
     List<String> findAllCreateTime();

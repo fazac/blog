@@ -10,12 +10,17 @@ import com.yyft.blog.mapper.BlogMapper;
 import com.yyft.blog.util.QueryConvert;
 import com.yyft.common.utils.mapper.JsonMapper;
 import com.yyft.common.utils.text.StringUtil;
+import com.yyft.common.utils.time.ClockUtil;
+import com.yyft.common.utils.time.DateFormatUtil;
 import com.yyft.common.utils.time.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.time.temporal.ChronoUnit;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -65,8 +70,6 @@ public class BlogService {
     }
 
     public IPage<Blog> findByTableQuery(TableQuery tq) {
-        Page<Blog> page = QueryConvert.convertPage(tq);
-        QueryWrapper<Blog> wrapper = QueryConvert.convertWrapper(tq);
         IPage<Blog> blogs = blogMapper.selectPage(QueryConvert.convertPage(tq), QueryConvert.convertWrapper(tq));
         blogs.getRecords().forEach(x -> {
             x.setContent("");
@@ -90,8 +93,13 @@ public class BlogService {
         return blogMapper.deleteBatchIds(ids) == ids.size();
     }
 
-    public boolean publishBlogs(List<Integer> ids) {
-        return blogMapper.publishBlogs(ids) == ids.size();
+    public boolean publishBlogs(List<Integer> ids, String date) throws ParseException {
+        Date publishDate = ClockUtil.currentDate();
+        if (StringUtils.isNotBlank(date)) {
+            Date appoint = DateFormatUtil.PATTERN_ISO_ON_NO_SEP_DATE_FORMAT.parse(date);
+            publishDate = new Date(appoint.getTime() + publishDate.getTime() - DateUtil.getDayStart(publishDate, 0).getTime());
+        }
+        return blogMapper.publishBlogs(ids, publishDate) == ids.size();
     }
 
     @Autowired

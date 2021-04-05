@@ -11,6 +11,7 @@ import com.yyft.blog.service.FeelingService;
 import com.yyft.blog.service.LabelService;
 import com.yyft.blog.tools.listener.ApplicationStartCacheListener;
 import com.yyft.common.model.Result;
+import com.yyft.common.model.ResultCode;
 import com.yyft.common.utils.text.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -140,12 +142,17 @@ public class AdminBlogController {
 
     @GetMapping("publishBlogs")
     @ResponseBody
-    public Result publishBlogs(@RequestParam("ids") String ids) {
+    public Result publishBlogs(@RequestParam("ids") String ids, @RequestParam(value = "date", required = false) String date) {
         if (StringUtils.isBlank(ids)) {
             return Result.createBizError(PARAM_IS_BLANK.code(), "参数不能为空");
         }
         List<Integer> param = Arrays.stream(ids.split(",")).map(Integer::parseInt).collect(Collectors.toList());
-        return Result.createSuccess("res", blogService.publishBlogs(param));
+        try {
+            return Result.createSuccess("res", blogService.publishBlogs(param, date));
+        } catch (ParseException e) {
+            log.error("日期转换错误", e);
+            return Result.createBizError(ResultCode.PARAM_TYPE_BIND_ERROR.code(), "日期参数格式错误");
+        }
     }
 
     @Autowired

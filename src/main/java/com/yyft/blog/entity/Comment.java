@@ -24,7 +24,8 @@ public class Comment implements Serializable {
 
     private String content;
     @TableLogic
-    private Boolean is_del;
+    @TableField(fill = FieldFill.INSERT)
+    private String isDel;
 
     private String status;
 
@@ -35,6 +36,20 @@ public class Comment implements Serializable {
     @TableField(fill = FieldFill.INSERT)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
+
+    private Integer sid;
+
+    private Integer bid;
+
+    private String type;
+
+    private String reEmail;
+
+    private String viewable;
+
+    @TableField(exist = false)
+    private Comment sComment;
+
 
     private static final long serialVersionUID = 1L;
 }

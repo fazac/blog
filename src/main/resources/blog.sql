@@ -105,8 +105,17 @@ alter table comment
 alter table feeling
     add column `is_del` tinyint(2);
 
--- 2021-04-04
+-- 2021-04-04(√)
 alter table label
     modify column `status` varchar(2) default '0' comment '0有效 1无效';
 alter table `yf_usr`
     add column `totp_sk` varchar(32);
+
+-- 2021-04-05
+alter table `comment`
+    add column `sid`      int(9) comment '回复id',
+    add column `bid`      int(9) comment 'blogid',
+    add column `type`     varchar(2) comment '0评论 ,1 回复',
+    add column `re_email` varchar(2) comment '0无需email回复,1需email回复';
+alter table `comment`
+    add column `viewable` varchar(2) comment '是否可见';

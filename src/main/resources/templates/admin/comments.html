@@ -7,9 +7,255 @@
         <div th:replace="admin/common::admin-side-bar"></div>
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
             <div th:replace="admin/common::admin-head-nav"></div>
+
+            <div class="row col-md-9 pt-4">
+                <button data-toggle="modal" data-target="#confirm_model"
+                        data-title="审核通过" data-desc="确认通过所选评论"
+                        data-action="passComment"
+                        class="btn btn-info ml-5">审核通过
+                </button>
+
+                <button data-toggle="modal" data-target="#confirm_model"
+                        data-title="审核驳回" data-desc="确认驳回所选评论"
+                        data-action="unpassComment"
+                        class="btn btn-danger ml-5">审核驳回
+                </button>
+
+                <button data-title="回复评论" id="modify_button"
+                        class="btn btn-info ml-5">回复评论
+                </button>
+            </div>
+
+            <div class="table-responsive pt-2">
+                <table id="blog_table" class="table stripe compact hover">
+                    <thead>
+                    <tr>
+                        <th><input type="checkbox" id="_all_select"/></th>
+                        <th>序号</th>
+                        <th>名称</th>
+                        <th>邮箱</th>
+                        <th>内容</th>
+                        <th>回复内容</th>
+                        <th>审核状态</th>
+                        <th>审核结果</th>
+                        <th>创建时间</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="modal fade" id="edit_model" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Modal title</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row align-center">
+                                <div class="col-md-3 text-center">回复</div>
+                                <div class="col-md-8">
+                                    <input type="text" id="reply_content" value=""
+                                           placeholder="请输入回复"
+                                           class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer justify-content-center">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                            <button type="button" id="edit_confirm_button" class="btn btn-info ml-5">确认</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </main>
     </div>
 </div>
 </body>
 <div th:replace="admin/common::admin-footer"></div>
+
+<script type="text/javascript">
+    "use strict"
+    let dtsLanguage = "/static/ui/language/dtsLanguage.txt"
+    let dt;
+    $(document).ready(function () {
+        dt = $("#blog_table").DataTable({
+            serverSide: true,
+            destroy: true,
+            bLengthChange: false,
+            bAutoWidth: false,
+            bInfo: true,
+            order: [8, "desc"],
+            pageLength: 10,
+            language: {
+                url: dtsLanguage
+            },
+            columns: [
+                {
+                    data: null, searchable: false, width: '10px',
+                    render: function (data, type, full, meta) {
+                        return " <input type='checkbox' data-id='" + full.sn + "'/>";
+                    }
+                },
+                {
+                    data: null, width: "20px", render: function (data, type, row, meta) {
+                        return meta.row + 1 +
+                            meta.settings._iDisplayStart;
+                    }
+                },
+                {data: 'name', width: '100px'},
+                {data: 'email', width: '100px', searchable: false, orderable: false},
+                {data: 'content', width: '250px'},
+                {
+                    data: null, width: '250px',
+                    render: function (data, type, full, meta) {
+                        if (full.scomment !== undefined) {
+                            return full.scomment["content"];
+                        } else {
+                            return "";
+                        }
+                    }
+                },
+                {
+                    data: 'status', width: '40px',
+                    render: function (data, type, full, meta) {
+                        if ('1' === data.trim()) {
+                            return '已审';
+                        } else {
+                            return '未审';
+                        }
+                    }
+                },
+                {
+                    data: 'viewable', width: '40px',
+                    render: function (data, type, full, meta) {
+                        if ('1' === data.trim()) {
+                            return '可见';
+                        } else {
+                            return '屏蔽';
+                        }
+                    }
+                },
+                {
+                    name: 'create_time', width: '80px',
+                    data: 'createTime',
+                    render: function (data, type, full, meta) {
+                        return timeFormat(data, "YMDHM");
+                    }
+                },
+            ],
+            columnDefs: [
+                {
+                    targets: [0],
+                    orderable: false,
+                }, {
+                    defaultContent: '',
+                    targets: ['_all'],
+                }
+            ],
+            ajax: function (data, callback, setting) {
+                $.ajax({
+                    url: "/admin/comment/getComments",
+                    type: "POST",
+                    contentType: "application/json",
+                    dataType: "json",
+                    data: JSON.stringify(data),
+                    success: function (res) {
+                        callback(res.detail.bizData);
+                    },
+                })
+            },
+            createdRow: function (row, data, index) {
+                $('td', row).attr("class", "text-center");
+                let content = $('td:nth-child(5)', row);
+                content.attr("class", "text-left table-cell pl-1");
+                content.prop("title", data['content']);
+                let reply = $('td:nth-child(6)', row);
+                reply.attr("class", "text-left table-cell pl-1");
+                reply.prop("title", data.scomment !== undefined ? data.scomment["content"] : '');
+            },
+
+        });
+
+        $("#modify_button").click(function () {
+            let ids = [];
+            let checkedIds = $(":checked:not(#_all_select)input[type='checkbox']");
+            for (let id of checkedIds) {
+                ids.push($(id).data('id'));
+            }
+            if (ids.length === 1) {
+                let modal = $("#edit_model");
+                modal.find('.modal-title').text($(this).data('title'));
+                modal.modal("show");
+                $('#edit_confirm_button').off("click").on("click", function () {
+                    reply(ids);
+                })
+            } else {
+                tipMsg("只能选择一条评论回复");
+            }
+        });
+    });
+
+    function reply(ids) {
+        let reply = $("#reply_content")[0].value;
+        if (reply === undefined || reply === "") {
+            return;
+        }
+        $.post("/admin/comment/replyComment", {
+            id: ids[0],
+            reply: reply
+        }, function (res) {
+            $("#edit_model").modal("hide");
+            dt.ajax.reload();
+            if (res.detail.bizData === true) {
+                tipMsg("回复成功");
+            } else {
+                tipMsg("回复失败");
+            }
+        });
+    }
+
+    function passComment(ids) {
+        console.log(ids);
+        if (ids.length === 0) {
+            $("#confirm_model").modal("hide");
+            tipMsg("未选择评论");
+        } else {
+            $.get("/admin/comment/passComment", {
+                ids: ids.join(','),
+            }, function (res) {
+                $("#confirm_model").modal("hide");
+                dt.ajax.reload();
+                if (res.detail.bizData === true) {
+                    tipMsg("通过成功");
+                } else {
+                    tipMsg("通过失败");
+                }
+            });
+        }
+    }
+
+    function unpassComment(ids) {
+        if (ids.length === 0) {
+            $("#confirm_model").modal("hide");
+            tipMsg("未选择评论");
+        } else {
+            $.get("/admin/comment/unpassComment", {
+                ids: ids.join(','),
+            }, function (res) {
+                $("#confirm_model").modal("hide");
+                dt.ajax.reload();
+                if (res.detail.bizData === true) {
+                    tipMsg("驳回成功");
+                } else {
+                    tipMsg("驳回失败");
+                }
+            });
+        }
+    }
+</script>
 </html>

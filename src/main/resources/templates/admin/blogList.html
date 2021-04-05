@@ -11,11 +11,17 @@
             <div class="row col-md-9 pt-4">
                 <a class="btn btn-success" href="/admin/createBlog">新增</a>
                 <a class="btn btn-info ml-5" id="_modify">修改</a>
+
                 <button data-toggle="modal" data-target="#confirm_model"
                         data-title="发布确认" data-desc="确认发布所选文章"
                         data-action="publicBlogs"
                         class="btn btn-info ml-5">发布
                 </button>
+
+                <button data-title="文章发布" id="modify_button"
+                        class="btn btn-info ml-5">指定日期发布
+                </button>
+
                 <button data-toggle="modal" data-target="#confirm_model"
                         data-title="删除确认" data-desc="确认删除所选文章"
                         data-action="deleteBlogs"
@@ -27,8 +33,9 @@
                     <thead>
                     <tr>
                         <th><input type="checkbox" id="_all_select"/></th>
+                        <th>序号</th>
                         <th>标题</th>
-                        <th>分类</th>
+                        <th>标签</th>
                         <th>摘要</th>
                         <th>状态</th>
                         <th>创建时间</th>
@@ -49,11 +56,38 @@
                     </tbody>
                 </table>
             </div>
+
+            <div class="modal fade" id="edit_model" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Modal title</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row align-center">
+                                <div class="col-md-3 text-center">发布日期</div>
+                                <div class="col-md-8">
+                                    <input type="text" id="date" name="datetimepicker" value="" placeholder="选择日期"
+                                           class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer justify-content-center">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                            <button type="button" id="edit_confirm_button" class="btn btn-info ml-5">确认</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </main>
     </div>
 </div>
 <div th:include="admin/common::admin-footer"></div>
 </body>
+
 <script type="text/javascript">
     "use strict";
 
@@ -67,6 +101,7 @@
             bAutoWidth: false,
             bInfo: true,
             order: [6, "desc"],
+            pageLength: 15,
             language: {
                 url: dtsLanguage
             },
@@ -75,6 +110,12 @@
                     data: null, searchable: false, width: '10px',
                     render: function (data, type, full, meta) {
                         return " <input type='checkbox' data-id='" + full.blogId + "'/>";
+                    }
+                },
+                {
+                    data: null, width: "20px", render: function (data, type, row, meta) {
+                        return meta.row + 1 +
+                            meta.settings._iDisplayStart;
                     }
                 },
                 {data: 'title', width: '100px'},
@@ -93,14 +134,21 @@
                 {
                     name: 'create_time', width: '80px',
                     data: 'createTime',
+                    render: function (data, type, full, meta) {
+                        return timeFormat(data, "YMDHM");
+                    }
                 },
                 {
                     name: 'publish_time', width: '80px',
-                    data: 'publishTime',
+                    data: 'publishTime', render: function (data, type, full, meta) {
+                        return timeFormat(data, "YMDHM");
+                    }
                 },
                 {
                     name: 'update_time', width: '80px',
-                    data: 'updateTime',
+                    data: 'updateTime', render: function (data, type, full, meta) {
+                        return timeFormat(data, "YMDHM");
+                    }
                 },
             ],
             columnDefs: [
@@ -130,11 +178,41 @@
             },
             createdRow: function (row, data, index) {
                 $('td', row).attr("class", "text-center");
-                let digist = $('td:nth-child(4)', row);
+                let digist = $('td:nth-child(5)', row);
                 digist.attr("class", "text-left table-cell");
                 digist.prop("title", data['digest']);
             },
 
+        });
+
+        $('#date').datetimepicker({
+            forceParse: 0,//设置为0，时间不会跳转1899，会显示当前时间。
+            language: 'zh-CN',//显示中文
+            format: 'yyyymmdd',//显示格式
+            minView: "month",//设置只显示到月份
+            initialDate: new Date(),//初始化当前日期
+            autoclose: true,//选中自动关闭
+            todayBtn: true//显示今日按钮
+        })
+
+        // $("#date").datetimepicker("setDate", new Date());  //设置显示默认当天的时间
+
+        $("#modify_button").click(function () {
+            let ids = [];
+            let checkedIds = $(":checked:not(#_all_select)input[type='checkbox']");
+            for (let id of checkedIds) {
+                ids.push($(id).data('id'));
+            }
+            if (checkedIds.length > 0) {
+                let modal = $("#edit_model");
+                modal.find('.modal-title').text($(this).data('title'));
+                modal.modal("show");
+                $('#edit_confirm_button').off("click").on("click", function () {
+                    publicBlogsOnDate(ids);
+                })
+            } else if (checkedIds.length === 0) {
+                tipMsg("需选择至少一篇文章发布");
+            }
         });
     });
 
@@ -168,6 +246,30 @@
                 ids: ids.join(','),
             }, function (res) {
                 $("#confirm_model").modal("hide");
+                dt.ajax.reload();
+                if (res.detail.bizData === true) {
+                    tipMsg("发布成功");
+                } else {
+                    tipMsg("发布失败");
+                }
+            });
+        }
+    }
+
+    function publicBlogsOnDate(ids) {
+        if (ids.length === 0) {
+            $("#confirm_model").modal("hide");
+            tipMsg("未选择文章");
+        } else {
+            let datepicker = $("#date")[0].value;
+            if (datepicker === undefined || datepicker === "") {
+                return;
+            }
+            $.get("/admin/publishBlogs", {
+                ids: ids.join(','),
+                date: datepicker
+            }, function (res) {
+                $("#edit_model").modal("hide");
                 dt.ajax.reload();
                 if (res.detail.bizData === true) {
                     tipMsg("发布成功");
