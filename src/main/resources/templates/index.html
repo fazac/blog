@@ -22,7 +22,8 @@
                         <strong class="d-inline-block mb-2 text-primary blog-post-meta"
                                 th:text="${blog.labelidsName}">World</strong>
                     </div>
-                    <div class="col-auto d-none d-lg-block" th:if="${blog.showCoverPic}">
+                    <div class="col-auto  d-none d-lg-block"
+                         th:if="${blog.showCoverPic!=null and blog.showCoverPic!=''}">
                         <img th:src="${blog.showCoverPic}" width="200" height="250"/>
                     </div>
                 </div>
