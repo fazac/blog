@@ -124,3 +124,14 @@ alter table `comment`
 
 alter table `comment`
     modify column `re_email` tinyint(2) comment '0无需email回复,1需email回复';
+
+create table `sys_config`
+(
+    `sn`      int primary key auto_increment,
+    `name`    varchar(30) comment '配置名',
+    `content` varchar(256) comment '内容',
+    `is_del`  varchar(2) comment '是否已删'
+);
+
+alter table `yf_usr`
+    add column `totp_img` varchar(256) comment '二维码地址';

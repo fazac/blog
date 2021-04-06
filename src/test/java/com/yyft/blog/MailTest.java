@@ -1,5 +1,6 @@
 package com.yyft.blog;
 
+import com.yyft.blog.config.MailConfig;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ public class MailTest {
 
     @Autowired
     private JavaMailSender mailSender;
+
 
     @Test
     public void testSendMail() {

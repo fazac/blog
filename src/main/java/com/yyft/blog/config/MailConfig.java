@@ -1,5 +1,7 @@
 package com.yyft.blog.config;
 
+import com.yyft.blog.mapper.SysConfigMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -15,6 +17,8 @@ import java.util.Properties;
  */
 @Configuration
 public class MailConfig {
+    @Autowired
+    private SysConfigMapper sysConfigMapper;
 
     @Bean
     public JavaMailSender javaMailService() {
@@ -23,8 +27,8 @@ public class MailConfig {
         javaMailSender.setPort(587);
         javaMailSender.setProtocol("smtp");
         javaMailSender.setDefaultEncoding("utf-8");
-        javaMailSender.setUsername("1650031931@qq.com");
-        javaMailSender.setPassword("mbsxinxdsbfmdccb");
+        javaMailSender.setUsername(sysConfigMapper.findByName("username"));
+        javaMailSender.setPassword(sysConfigMapper.findByName("password"));
         javaMailSender.setJavaMailProperties(getMailProperties());
         return javaMailSender;
     }

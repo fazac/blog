@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.UUID;
 
 /**
  * @author fzc
@@ -34,8 +35,10 @@ public class AdminPasswordController {
     private YfTokenService yfTokenService;
 
     @RequestMapping
-    public String pagePassword(Model model) {
-        model.addAttribute("url", Constants.KEY_PATH);
+    public String pagePassword(Model model, HttpServletRequest request) {
+        String token = request.getSession().getAttribute("access_token").toString();
+        YfUsr yf = yfUserService.selectById(yfTokenService.findUserIdByToken(token));
+        model.addAttribute("url", yf.getTotpImg());
         return "admin/password";
     }
 
@@ -46,15 +49,17 @@ public class AdminPasswordController {
         YfUsr yf = yfUserService.selectById(yfTokenService.findUserIdByToken(token));
         String key = TotpUtil.createSecretKey();
         yf.setTotpSk(key);
-        yfUserService.updateById(yf);
         String url = TotpUtil.createGoogleAuthQRCodeData(key);
+        String path = request.getSession().getServletContext().getRealPath(Constants.KEY_DIR);
+        String name = UUID.randomUUID().toString() + Constants.KEY_NAME;
+        yf.setTotpImg(Constants.KEY_URL + name);
         try {
-            String path = request.getSession().getServletContext().getRealPath(Constants.KEY_DIR);
-            TotpUtil.generateMatrixPic(url, Constants.KEY_IMG_SIZE, Constants.KEY_IMG_SIZE, path, Constants.KEY_NAME);
+            TotpUtil.generateMatrixPic(url, Constants.KEY_IMG_SIZE, Constants.KEY_IMG_SIZE, path, name);
         } catch (IOException | WriterException e) {
             log.error("生成新密钥图片错误", e);
             return Result.createError();
         }
+        yfUserService.updateById(yf);
         return Result.createSuccess();
     }
 

@@ -1,7 +1,9 @@
 package com.yyft.blog.controller;
 
+import com.yyft.blog.service.SysConfigService;
 import com.yyft.blog.util.FileUploadUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,8 +16,10 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 @RequestMapping(value = "/blog/upload")
 public class FileUploadController {
-    private static final String IMAGE_URL_PREFIX = "http://localhost:8001/static/upload_file/";
+    private static final String IMAGE_URL_PREFIX = "/static/upload_file/";
+    private SysConfigService sysConfigService;
     private final StringBuffer sb;
+
 
     {
         sb = new StringBuffer();
@@ -31,4 +35,8 @@ public class FileUploadController {
         return sb.toString();
     }
 
+    @Autowired
+    public void setSysConfigService(SysConfigService sysConfigService) {
+        this.sysConfigService = sysConfigService;
+    }
 }

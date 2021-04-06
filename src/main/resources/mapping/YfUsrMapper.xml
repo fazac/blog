@@ -11,9 +11,10 @@
         <result column="password" jdbcType="VARCHAR" property="password"/>
         <result column="salt" jdbcType="VARCHAR" property="salt"/>
         <result column="totp_sk" jdbcType="VARCHAR" property="totpSk"/>
+        <result column="totp_img" jdbcType="VARCHAR" property="totpImg"/>
     </resultMap>
     <sql id="Base_Column_List">
-        sn, `name`, phone, email, img, `uid`, `password`, salt ,`totp_sk`
+        sn, `name`, phone, email, img, `uid`, `password`, salt ,`totp_sk` ,`totp_img`
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
@@ -125,6 +126,9 @@
             <if test="totpSk != null">
                 totp_sk = #{totpSk,jdbcType=VARCHAR},
             </if>
+            <if test="totpImg != null">
+                totp_img = #{totpImg,jdbcType=VARCHAR},
+            </if>
         </set>
         where sn = #{sn,jdbcType=INTEGER}
     </update>
@@ -137,7 +141,8 @@
         `uid` = #{uid,jdbcType=VARCHAR},
         `password` = #{password,jdbcType=VARCHAR},
         salt = #{salt,jdbcType=VARCHAR},
-        `totp_sk` = #{totpSk ,jdbcType=VARCHAR}
+        `totp_sk` = #{totpSk ,jdbcType=VARCHAR},
+        `totp_img` = #{totpImg ,jdbcType=VARCHAR}
         where sn = #{sn,jdbcType=INTEGER}
     </update>
 </mapper>

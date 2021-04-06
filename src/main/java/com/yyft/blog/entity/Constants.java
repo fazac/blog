@@ -19,8 +19,9 @@ public interface Constants {
     String LINE_SEPERATOR = "|";
     String TWO_LINE_SEPERATOR = "||";
     String ADMIN_PATH = "/admin/";
-    String KEY_PATH = "http://localhost:8001/static/totp/user.png";
     String KEY_DIR = "totp";
-    String KEY_NAME = "user.png";
+    String KEY_NAME = "png";
+    String UPLOAD_URL = "/static/upload_file/";
+    String KEY_URL = "/static/totp/";
 
 }

@@ -50,7 +50,7 @@ public class BlogService {
             wrapper.and(x -> x.or().like("title", name).or().like("digest", name));
         }
         if (StringUtils.isNotBlank(archive)) {
-            Date d = DateUtil.toDate(archive.replace(" ", "") + "-01 00:00:00", "yyyy-MM-dd HH:mm:ss");
+            Date d = DateUtil.toDate(archive + "/01 00:00:00", "MM/yy/dd HH:mm:ss");
             wrapper.lt("publish_time", DateUtil.getMonthEnd(d, 0));
             wrapper.ge("publish_time", DateUtil.getMonthStart(d, 0));
         }

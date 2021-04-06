@@ -47,6 +47,6 @@ public interface BlogMapper extends BaseMapper<Blog> {
             " #{id, jdbcType=INTEGER} </foreach> </script>")
     int publishBlogs(@Param("ids") List<Integer> ids, Date date);
 
-    @Select("select DISTINCT(DATE_FORMAT(publish_time,'%Y - %m')) date from blog where is_del = '0' order by date desc;")
+    @Select("select DISTINCT(DATE_FORMAT(publish_time,'%m/%y')) date from blog where is_del = '0' order by date desc;")
     List<String> findAllCreateTime();
 }

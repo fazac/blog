@@ -52,19 +52,18 @@
                     </th:block>
                 </ul>
             </div>
-
-            <div class="p-4" style="margin-top: 300px">
+            <div class="p-4">
                 <h4 class="font-italic">Archives</h4>
-                <ol class="tags list-unstyled mb-0 mt-4">
+                <ol class=" list-unstyled mb-0 mt-4 row">
                     <th:block th:each="archive : ${archives}">
-                        <li class="mb-3"><a class="btn  border s-param-archive">
+                        <li class="mb-3 col-4 text-left"><a class="btn  border s-param-archive">
                             <th:block th:text="${archive}">label</th:block>
                         </a></li>
                     </th:block>
                 </ol>
             </div>
 
-            <div class="p-4" style="margin-top: 300px">
+            <div class="p-4">
                 <h4 class="font-italic">Comments</h4>
                 <ol class="list-unstyled mb-0 mt-4">
                     <th:block th:each="comment : ${comments}">

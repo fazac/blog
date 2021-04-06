@@ -141,7 +141,9 @@
                 {
                     name: 'publish_time', width: '80px',
                     data: 'publishTime', render: function (data, type, full, meta) {
-                        return timeFormat(data, "YMDHM");
+                        if (data != null) {
+                            return timeFormat(data, "YMDHM");
+                        }
                     }
                 },
                 {
