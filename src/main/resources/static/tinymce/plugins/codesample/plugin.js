@@ -2113,10 +2113,10 @@
         var node = getSelectedCodeSample(editor);
         code = global$1.DOM.encode(code);
         return node.fold(function () {
-          editor.insertContent('<pre id="__new" class="language-' + language + '">' + code + '</pre>');
+          editor.insertContent('<pre id="__new" class="language-' + language + ' line-numbers">' + code + '</pre>');
           editor.selection.select(editor.$('#__new').removeAttr('id')[0]);
         }, function (n) {
-          editor.dom.setAttrib(n, 'class', 'language-' + language);
+          editor.dom.setAttrib(n, 'class', 'line-numbers language-' + language);
           n.innerHTML = code;
           get$1(editor).highlightElement(n);
           editor.selection.select(n);

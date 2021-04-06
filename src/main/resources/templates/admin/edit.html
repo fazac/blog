@@ -47,6 +47,7 @@
 <div th:replace="admin/common::admin-footer"></div>
 <script th:src="@{/static/ui/js/upload.js}"></script>
 <script th:src="@{/static/tinymce/tinymce.js}"></script>
+<script th:src="@{/static/ui/js/prism.js}"></script>
 <script type="text/javascript">
     $(function () {
         $("#upload-btn").click(function () {
@@ -111,6 +112,14 @@
             + "微软雅黑=Microsoft YaHei",
         block_formats: "Header 1=h1;Header 2=h2;Header 3=h3; Header 4=h4;Pre=pre;Paragraph=p",
         quickbars_selection_toolbar: 'bold italic forecolor | link blockquote quickimage',
+        codesample_languages: [
+            {text: 'HTML/XML', value: 'markup'},
+            {text: 'JavaScript', value: 'javascript'},
+            {text: 'CSS', value: 'css'},
+            {text: 'Java', value: 'java'},
+            {text: 'C', value: 'c'},
+            {text: 'C++', value: 'cpp'}
+        ],
         images_upload_handler: function (blobInfo, success, failure, progress) {
             let file = blobInfo.blob();
             upload_file(file, success, failure, progress);
