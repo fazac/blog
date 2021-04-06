@@ -7,6 +7,7 @@ import com.yyft.blog.entity.Blog;
 import com.yyft.blog.entity.Constants;
 import com.yyft.blog.entity.Label;
 import com.yyft.blog.mapper.LabelMapper;
+import com.yyft.blog.tools.listener.ApplicationStartCacheListener;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ import java.util.Map;
 @Service
 public class LabelService {
     private LabelMapper labelMapper;
+    private ApplicationStartCacheListener ac;
 
     public List<Label> findByType(String type) {
         Map<String, Object> map = new HashMap<>();
@@ -46,11 +48,21 @@ public class LabelService {
 //    }
 
     public boolean createLabel(Label label) {
-        return labelMapper.insert(label) == 1;
+        int res = labelMapper.insert(label);
+        if (res == 1) {
+            ac.refreshLabels();
+            return true;
+        }
+        return false;
     }
 
     public boolean updateLabel(Label label) {
-        return labelMapper.updateById(label) == 1;
+        int res = labelMapper.updateById(label);
+        if (res == 1) {
+            ac.refreshLabels();
+            return true;
+        }
+        return false;
     }
 
     public boolean deleteLabels(List<Integer> ids) {
@@ -60,5 +72,10 @@ public class LabelService {
     @Autowired
     public void setLabelMapper(LabelMapper labelMapper) {
         this.labelMapper = labelMapper;
+    }
+
+    @Autowired
+    public void setAc(ApplicationStartCacheListener ac) {
+        this.ac = ac;
     }
 }

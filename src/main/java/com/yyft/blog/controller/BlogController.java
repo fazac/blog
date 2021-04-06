@@ -47,11 +47,6 @@ public class BlogController {
     @GetMapping("index")
     public String index(Model model) {
         IPage<Blog> ipages = blogService.findBlogsByQuery(0, Constants.FONT_PAGE_SIZE, null, "", "", "PUBLISH");
-        if (ipages.getRecords() != null) {
-            for (Blog b : ipages.getRecords()) {
-                b.setLabelidsName(ac.getLablesCache(b.getLabelids()));
-            }
-        }
         return getBlogElse(model, ipages);
     }
 
@@ -85,6 +80,11 @@ public class BlogController {
     }
 
     private String getBlogElse(Model model, IPage<Blog> ipages) {
+        if (ipages.getRecords() != null) {
+            for (Blog b : ipages.getRecords()) {
+                b.setLabelidsName(ac.getLablesCache(b.getLabelids()));
+            }
+        }
         List<Label> labels = labelService.findByType("0");
         List<Blog> blogs = ipages.getRecords();
         model.addAttribute("blogs", blogs);
