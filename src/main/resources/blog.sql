@@ -135,3 +135,5 @@ create table `sys_config`
 
 alter table `yf_usr`
     add column `totp_img` varchar(256) comment '二维码地址';
+
+alter table label change column `status` `is_del` varchar(2);

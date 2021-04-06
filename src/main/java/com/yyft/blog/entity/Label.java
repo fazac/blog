@@ -37,7 +37,7 @@ public class Label implements Serializable {
      */
     @TableLogic
     @TableField(fill = FieldFill.INSERT)
-    private String status;
+    private String isDel;
 
     private static final long serialVersionUID = 1L;
 }
