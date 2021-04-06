@@ -120,7 +120,7 @@
                 modal.find('.modal-title').text($(this).data('title'));
                 modal.modal("show");
                 modal.data('id', ids[0]);
-                let _input = checkedIds[0].parentNode.nextElementSibling;
+                let _input = checkedIds[0].parentNode.nextElementSibling.nextElementSibling;
                 modal.find('input[type="text"]').val(_input.textContent);
                 let _type = _input.nextElementSibling.textContent;
                 $.each(modal.find('option'), function (index, value, array) {
