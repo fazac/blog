@@ -75,6 +75,6 @@ public class YfUserController {
         // 向客户端发送cookie
         response.addCookie(cookie_username);
         session.invalidate();
-        return "login";
+        return "redirect:/admin";
     }
 }
