@@ -57,7 +57,8 @@
                 <h4 class="font-italic">Archives</h4>
                 <ol class=" list-unstyled mb-0 mt-4 row">
                     <th:block th:each="archive : ${archives}">
-                        <li class="mb-3 col-4 text-left"><a class="btn  border s-param-archive">
+                        <li class="mb-3 col-4 text-left" th:if="${archive != null && archive !=''}"><a
+                                class="btn  border s-param-archive">
                             <th:block th:text="${archive}">label</th:block>
                         </a></li>
                     </th:block>
