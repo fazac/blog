@@ -20,7 +20,7 @@ public interface Constants {
     String TWO_LINE_SEPERATOR = "||";
     String ADMIN_PATH = "/admin/";
     String KEY_DIR = "totp";
-    String KEY_NAME = "png";
+    String KEY_NAME = ".png";
     String UPLOAD_URL = "/static/upload_file/";
     String KEY_URL = "/static/totp/";
 
