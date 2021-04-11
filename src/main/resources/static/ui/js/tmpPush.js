@@ -10,7 +10,7 @@ function regSocket() {
     }
 
     if (socket === undefined && window.WebSocket) {
-        socket = new WebSocket("ws://fazac.top:8081/websocket");
+        socket = new WebSocket("wss://fazac.top/websocket");
 
         socket.onmessage = function (event) {
             $("#tip").attr("autohide", false);

@@ -59,7 +59,7 @@ public class BlogApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(BlogApplication.class, args);
-        new WebsocketServer().init();
+        new Thread(() -> new WebsocketServer().init()).start();
     }
 
 }
