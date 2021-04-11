@@ -2,6 +2,7 @@ package com.yyft.blog.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.yyft.blog.entity.Blog;
+import com.yyft.blog.entity.model.DateSortModel;
 import com.yyft.blog.entity.query.BlogQuery;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
@@ -47,6 +48,6 @@ public interface BlogMapper extends BaseMapper<Blog> {
             " #{id, jdbcType=INTEGER} </foreach> </script>")
     int publishBlogs(@Param("ids") List<Integer> ids, Date date);
 
-    @Select("select DISTINCT(DATE_FORMAT(publish_time,'%m/%y')) date from blog where is_del = '0' order by date desc;")
-    List<String> findAllCreateTime();
+    @Select("select DATE_FORMAT(publish_time,'%y-%m') date , count(1) count from blog where is_del = '0' and publish_time is not null  group by date ORDER BY date desc ;")
+    List<DateSortModel> findAllCreateTime();
 }

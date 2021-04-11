@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yyft.blog.entity.Blog;
 import com.yyft.blog.entity.Constants;
+import com.yyft.blog.entity.model.DateSortModel;
 import com.yyft.blog.entity.vo.TableQuery;
 import com.yyft.blog.mapper.BlogMapper;
 import com.yyft.blog.util.QueryConvert;
@@ -18,8 +19,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @Description
@@ -50,7 +53,7 @@ public class BlogService {
             wrapper.and(x -> x.or().like("title", name).or().like("digest", name));
         }
         if (StringUtils.isNotBlank(archive)) {
-            Date d = DateUtil.toDate(archive + "/01 00:00:00", "MM/yy/dd HH:mm:ss");
+            Date d = DateUtil.toDate(archive + "-01 00:00:00", "yy-MM-dd HH:mm:ss");
             wrapper.lt("publish_time", DateUtil.getMonthEnd(d, 0));
             wrapper.ge("publish_time", DateUtil.getMonthStart(d, 0));
         }
@@ -73,7 +76,7 @@ public class BlogService {
         return blogs;
     }
 
-    public List<String> findCreateTime() {
+    public List<DateSortModel> findCreateTime() {
         return blogMapper.findAllCreateTime();
     }
 

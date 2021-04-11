@@ -5,12 +5,17 @@ import com.yyft.blog.entity.Blog;
 import com.yyft.blog.entity.Comment;
 import com.yyft.blog.entity.Constants;
 import com.yyft.blog.entity.Label;
+import com.yyft.blog.entity.model.DateSortModel;
 import com.yyft.blog.service.BlogService;
 import com.yyft.blog.service.CommentService;
 import com.yyft.blog.service.FeelingService;
 import com.yyft.blog.service.LabelService;
+import com.yyft.blog.tools.handler.ChannelSupervise;
 import com.yyft.blog.tools.listener.ApplicationStartCacheListener;
 import com.yyft.common.utils.mapper.JsonMapper;
+import com.yyft.common.utils.time.ClockUtil;
+import com.yyft.common.utils.time.DateFormatUtil;
+import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -90,7 +95,7 @@ public class BlogController {
         model.addAttribute("blogs", blogs);
         model.addAttribute("page", ipages.getPages());
         model.addAttribute("current", ipages.getCurrent());
-        List<String> archives = blogService.findCreateTime();
+        List<DateSortModel> archives = blogService.findCreateTime();
         model.addAttribute("archives", archives);
         model.addAttribute("labels", labels);
         model.addAttribute("showSearch", Boolean.TRUE);
@@ -103,6 +108,8 @@ public class BlogController {
     @PostMapping("/commitComment")
     public String commitComment(@ModelAttribute Comment comment) {
         commentService.addComment(comment);
+        ChannelSupervise.send2All(new TextWebSocketFrame(DateFormatUtil.DEFAULT_ON_SECOND_FORMAT.format(ClockUtil.currentDate())
+                + ": " + "文章有新的评论"));
         return "redirect:/blog/blog/" + comment.getBid();
 //        return "/blog/blog";
     }

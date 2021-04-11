@@ -1,6 +1,7 @@
 package com.yyft.blog;
 
 import com.baomidou.mybatisplus.extension.injector.LogicSqlInjector;
+import com.yyft.blog.controller.WebsocketServer;
 import com.yyft.blog.tools.filter.NoCacheFilter;
 import com.yyft.blog.tools.filter.RedirectFilter;
 import com.yyft.blog.tools.filter.SelfDefineInvalidCharacterFilter;
@@ -58,6 +59,7 @@ public class BlogApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(BlogApplication.class, args);
+        new WebsocketServer().init();
     }
 
 }
